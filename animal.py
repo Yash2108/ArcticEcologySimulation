@@ -1,4 +1,4 @@
-from random import random
+from random import random, uniform
 from numpy.random import normal
 from abc import ABC, abstractmethod
 
@@ -21,3 +21,15 @@ class Animal(ABC):
 	@abstractmethod
 	def check_birth(self, same_neighbours):
 		pass
+	
+	@abstractmethod
+	def move(self):
+		pass
+	
+	def restrict(self, n, min_, max_):
+		n = max(min(max_, n), min_)
+		if n == 100:
+			n -= uniform(0, self.movement_speed * 10)
+		elif n == 0:
+			n += uniform(0, self.movement_speed * 10)
+		return n

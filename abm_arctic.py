@@ -7,6 +7,7 @@ import pycxsimulator
 from pylab import *
 import numpy as np
 import matplotlib
+import copy as cp
 
 matplotlib.use('TkAgg')
 		 
@@ -34,6 +35,7 @@ def observe():
 	plot(x['PolarBear'], y['PolarBear'], 'ro')
 	plot(x['RingedSeal'], y['RingedSeal'], 'yo')
 	axis([0, 100, 100, 0])
+	title("Ringed Seals: {rs}    Polar Bears: {pb}".format(rs = RingedSeal.count, pb = PolarBear.count))
 
 def restrict(n, movement_speed, min_, max_):
 	n = max(min(max_, n), min_)
@@ -43,25 +45,29 @@ def restrict(n, movement_speed, min_, max_):
 		n += uniform(0, movement_speed * 10)
 	return n
 
-def update():
+def update(ag):
 	global agents
-	ag = agents[randint(len(agents))]	
-	ag.x = restrict(ag.x + uniform(-ag.movement_speed, ag.movement_speed), ag.movement_speed, 0, 100)
-	ag.y = restrict(ag.y + uniform(-ag.movement_speed, ag.movement_speed), ag.movement_speed, 0, 100)
 	name = type(ag).__name__
 	neighbours = [nb for nb in agents if type(nb).__name__ != name and 
 							  (ag.x - nb.x) ** 2 + (ag.y - nb.y) ** 2 < ag.radius_sq]
 	same_neighbours = [nb for nb in agents if type(nb).__name__ == name and 
 							  (ag.x - nb.x) ** 2 + (ag.y - nb.y) ** 2 < ag.radius_sq]
-	ag.check_death(agents, neighbours)
-	ag.check_birth(agents, same_neighbours)	
+	ag.move()
+	if ag.check_death(agents, neighbours):
+		agents.remove(ag)
+		return True
+	elif ag.check_birth(agents, same_neighbours):
+		agents.append(cp.copy(ag))
+	return False
 			
 def update_one_unit_time():
 	global agents
-	t = 0
-	while t < 1:
-		t += 1 / len(agents)
-		update()
+	for ag in agents:
+		ag.move()
+	i = 0
+	while i < len(agents):
+		if not update(agents[i]):
+			i += 1
 
 if __name__ == "__main__":
 	blue = cm.get_cmap('Blues', 4)
