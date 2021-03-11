@@ -23,7 +23,7 @@ class RS(Animal):
     def __init__(self):
         self.id=Animal.id
         Animal.id+=1
-
+img_count=0
 vals={
     'bear':{
         'pop':4,
@@ -33,7 +33,11 @@ vals={
         'br': 0.1,
         'area': 0.1,
         'type': 'bear',
-        'weaning': 2.5
+        'weaning': 2.5,
+        'mating_age': {
+            'm':5,
+            'f':4
+        },
     },
     'seal':{
         'pop': 100,
@@ -43,7 +47,11 @@ vals={
         'br': 0.68,
         'area': 0.1,
         'type': 'seal',
-        'weaning': 6*7/365
+        'weaning': 6*7/365,
+        'mating_age': {
+            'm':5,
+            'f':3
+        }
     }
 }
 animal={0:'bear', 1:'seal'}
@@ -81,6 +89,10 @@ def move(ag):
 
 def feed(predator, prey):
     if random() < prey.dr:
+        if prey.child!=[]:
+            for i in prey.child:
+                if i in agents:
+                    agents.remove(i)
         agents.remove(prey)
         return True
     else:
@@ -102,6 +114,7 @@ def birth(which_animal, age, parent=None):
     ag.area=vals[animal[which_animal]]['area']
     ag.type=vals[animal[which_animal]]['type']
     ag.gender=rnd.choice(['m', 'f'])
+    ag.mating_age=vals[animal[which_animal]]['mating_age'][ag.gender]
     if parent==None:
         ag.x = random()
         ag.y = random()
@@ -138,15 +151,17 @@ def update():
             if feed(bear, ag):
                 return
         if len(seals)>0:
-            opp_gender=[]
-            for x in seals:
-                if x.gender!=ag.gender:
-                    opp_gender.append(x)
-            if len(opp_gender)!=0:
-                if random() < ag.br*(1-sum(1 for x in agents if x.type == 'seal')/vals['seal']['poplimit']):
-                    mate=rnd.choice(opp_gender)
-                    female= ag if ag.gender=='f' else mate
-                    birth(1, 0, female)
+            if ag.age>=ag.mating_age:
+                opp_gender=[]
+                for x in seals:
+                    if x.gender!=ag.gender:
+                        opp_gender.append(x)
+                
+                if len(opp_gender)!=0:
+                    if random() < ag.br*(1-sum(1 for x in agents if x.type == 'seal')/vals['seal']['poplimit']):
+                        mate=rnd.choice(opp_gender)
+                        female= ag if ag.gender=='f' else mate
+                        birth(1, 0, female)
     else:
         seals=[nb for nb in agents if nb.type == 'seal' and (ag.x - nb.x)**2 + (ag.y - nb.y)**2 < ag.area]
         bears=[nb for nb in agents if nb.type == 'bear' and (ag.x - nb.x)**2 + (ag.y - nb.y)**2 < ag.area and nb!=ag]
@@ -156,25 +171,26 @@ def update():
                 return
 
         if len(bears)!=0:
-            opp_gender=[]
-            same_gender=[]
-            for x in seals:
-                if x.gender!=ag.gender:
-                    opp_gender.append(x)
-                else:
-                    same_gender.append(x)
-            if len(opp_gender)!=0:
-                if random() < ag.br*(1-sum(1 for x in agents if x.type=='bear')/vals['bear']['poplimit']):
-                    mate=rnd.choice(opp_gender)
-                    female= ag if ag.gender=='f' else mate
-                    birth(0, 0, female)
+            if ag.age>=ag.mating_age:
+                opp_gender=[]
+                same_gender=[]
+                for x in seals:
+                    if x.gender!=ag.gender:
+                        opp_gender.append(x)
+                    else:
+                        same_gender.append(x)
+                if len(opp_gender)!=0:
+                    if random() < ag.br*(1-sum(1 for x in agents if x.type=='bear')/vals['bear']['poplimit']):
+                        mate=rnd.choice(opp_gender)
+                        female= ag if ag.gender=='f' else mate
+                        birth(0, 0, female)
     for x in agents:
         x.age+=1
 
 # import pycxsimulator
 
 def observe():
-    global agents
+    global agents, img_count
     cla()
     bears = [ag for ag in agents if ag.type == 'bear']
     if len(bears) > 0:
@@ -189,6 +205,7 @@ def observe():
     title("Bears: %f, Seals: %f"%(len(bears), len(seals)))
     axis('image')
     axis([0, 1, 0, 1])
+
 
 def update_one_unit_time():
     global agents
