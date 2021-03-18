@@ -15,11 +15,11 @@ class Animal(ABC):
 		self.radius_sq = self.radius ** 2
 		
 	@abstractmethod
-	def check_death(self, agents, ag, neighbours):
+	def check_death(self):
 		pass
 	
 	@abstractmethod
-	def check_birth(self, same_neighbours):
+	def check_birth(self):
 		pass
 	
 	@abstractmethod

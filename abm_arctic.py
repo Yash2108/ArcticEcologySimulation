@@ -13,7 +13,7 @@ matplotlib.use('TkAgg')
 		 
 def initialize():
 	global env, agents
-	env = np.vstack((np.ones((50, 100)), np.zeros((50, 100))))
+	env = np.vstack((np.ones((25, 100)), np.zeros((75, 100))))
 	agents = []
 	for i in range(PolarBear.initial_population // 2):
 		agents.append(PolarBear('m'))
@@ -32,18 +32,10 @@ def observe():
 		name = type(i).__name__
 		x[name].append(i.x)
 		y[name].append(i.y)
-	plot(x['PolarBear'], y['PolarBear'], 'ro')
+	plot(x['PolarBear'], y['PolarBear'], 'ro', markersize = 8)
 	plot(x['RingedSeal'], y['RingedSeal'], 'yo')
 	axis([0, 100, 100, 0])
 	title("Ringed Seals: {rs}    Polar Bears: {pb}".format(rs = RingedSeal.count, pb = PolarBear.count))
-
-def restrict(n, movement_speed, min_, max_):
-	n = max(min(max_, n), min_)
-	if n == 100:
-		n -= uniform(0, movement_speed * 10)
-	elif n == 0:
-		n += uniform(0, movement_speed * 10)
-	return n
 
 def update(ag):
 	global agents
@@ -51,19 +43,19 @@ def update(ag):
 	neighbours = [nb for nb in agents if type(nb).__name__ != name and 
 							  (ag.x - nb.x) ** 2 + (ag.y - nb.y) ** 2 < ag.radius_sq]
 	same_neighbours = [nb for nb in agents if type(nb).__name__ == name and 
-							  (ag.x - nb.x) ** 2 + (ag.y - nb.y) ** 2 < ag.radius_sq]
-	ag.move()
+										 (ag.x - nb.x) ** 2 + (ag.y - nb.y) ** 2 < ag.radius_sq]
 	if ag.check_death(agents, neighbours):
 		agents.remove(ag)
 		return True
 	elif ag.check_birth(agents, same_neighbours):
 		agents.append(cp.copy(ag))
+	ag.age += 1
 	return False
 			
 def update_one_unit_time():
 	global agents
 	for ag in agents:
-		ag.move()
+		ag.move(agents)
 	i = 0
 	while i < len(agents):
 		if not update(agents[i]):
