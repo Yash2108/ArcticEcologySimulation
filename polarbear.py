@@ -31,29 +31,30 @@ class PolarBear(Animal):
 		return False
 				
 	def move(self, agents):
-		name = 'PolarBear'
-		neighbours_vector = []
-		neighbours_dist = []
-		for nb in agents:
-			if type(nb).__name__ != name:
-				neighbours_vector.append([self.x - nb.x, self.y - nb.y])
-				neighbours_dist.append(neighbours_vector[-1][0] ** 2 + neighbours_vector[-1][1] ** 2)
-				if neighbours_dist[-1] >= self.radius_sq:
-					neighbours_vector.pop(-1)
-					neighbours_dist.pop(-1)
-		if len(neighbours_vector) > 0:
-			neighbours_vector = np.array(neighbours_vector)
-			neigbours_dist = np.array(neighbours_dist)
-			for i in range(len(neighbours_vector)):
-				neighbours_vector[i] = (neighbours_vector[i] * self.movement_speed) / neighbours_dist[i]
+ 		name = 'PolarBear'
+ 		neighbours_vector = []
+ 		neighbours_dist = []
+ 		for nb in agents:
+ 			if type(nb).__name__ != name:
+ 				neighbours_vector.append([nb.x - self.x, nb.y - self.y])
+ 				neighbours_dist.append(neighbours_vector[-1][0] ** 2 + neighbours_vector[-1][1] ** 2)
+ 				if neighbours_dist[-1] >= self.radius_sq:
+ 					neighbours_vector.pop(-1)
+ 					neighbours_dist.pop(-1)
+ 		if len(neighbours_vector) > 0:
+ 			neighbours_vector = np.array(neighbours_vector)
+ 			neigbours_dist = np.array(neighbours_dist)
+ 			for i in range(len(neighbours_vector)):
+ 				neighbours_vector[i] = (neighbours_vector[i] * self.movement_speed) / neighbours_dist[i]
 # 				neighbours_vector[i] = (neighbours_vector[i] * self.movement_speed ** 0.5)
-			print(neighbours_vector)
-			self.x, self.y = np.sum(neighbours_vector, axis = 0)
-		else:
-			self.x += uniform(-self.movement_speed, self.movement_speed)
-			self.y += uniform(-self.movement_speed, self.movement_speed)
-		self.x = self.restrict(self.x, 0, 100)
-		self.y = self.restrict(self.y, 0, 100)
+# 			print(neighbours_vector)
+# 			print(self.x, self.y)
+ 			self.x, self.y = np.sum(neighbours_vector, axis = 0)
+ 		else:
+ 			self.x += uniform(-self.movement_speed, self.movement_speed)
+ 			self.y += uniform(-self.movement_speed, self.movement_speed)
+ 		self.x = self.restrict(self.x, 0, 100)
+ 		self.y = self.restrict(self.y, 0, 100)
 
 # 		same_neighbours = [nb for nb in agents if type(nb).__name__ == name and 
 # 										   (self.x - nb.x) ** 2 + (self.y - nb.y) ** 2 < self.radius_sq]

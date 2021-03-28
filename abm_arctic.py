@@ -23,8 +23,11 @@ def initialize():
 		agents.append(RingedSeal('f'))	
 		
 def observe():
-	global env, agents
+	global env, agents, img_count
 	cla()
+	img_count += 1
+	mng = plt.get_current_fig_manager()
+	mng.window.state('zoomed')
 	imshow(env)
 	x = {'PolarBear': [], 'RingedSeal': []}
 	y = {'PolarBear': [], 'RingedSeal': []}
@@ -35,7 +38,8 @@ def observe():
 	plot(x['PolarBear'], y['PolarBear'], 'ro', markersize = 8)
 	plot(x['RingedSeal'], y['RingedSeal'], 'yo')
 	axis([0, 100, 100, 0])
-	title("Ringed Seals: {rs}    Polar Bears: {pb}".format(rs = RingedSeal.count, pb = PolarBear.count))
+	title("Step: {st}    Ringed Seals: {rs}    Polar Bears: {pb}".format(rs = RingedSeal.count, pb = PolarBear.count, st = img_count))
+	
 
 def update(ag):
 	global agents
@@ -62,6 +66,8 @@ def update_one_unit_time():
 			i += 1
 
 if __name__ == "__main__":
+	global img_count
+	img_count = 0
 	blue = cm.get_cmap('Blues', 4)
 	cm.register_cmap(name = 'ice', cmap = ListedColormap([blue(0), blue(1)]))
 	matplotlib.rcParams['image.cmap'] = 'ice'
