@@ -1,5 +1,5 @@
 from animal import Animal
-from random import random, uniform
+from random import random, uniform, choice
 from numpy.random import normal
 import numpy as np
 
@@ -10,10 +10,11 @@ class PolarBear(Animal):
 	capacity = 16
 	
 	#gender, age, probability_death, probability_birth, movement_speed, hunger, radius
-	def __init__(self, gender):
+	def __init__(self, gender, parents):
 		self.x = uniform(0, 100)
 		self.y = uniform(60, 80)
-		super().__init__(gender, 0, 0.1, 0.1, 10, 0, 30)
+		super().__init__(gender, 0, 0.1, 0.1, 10, 0, 30, 912.5, {'m': 1825, 'f': 1460}, parents)
+		self.uid = PolarBear.count
 		PolarBear.count += 1
 		
 	def check_death(self, agents, neighbours):
@@ -23,11 +24,19 @@ class PolarBear(Animal):
 		return False
 			
 	def check_birth(self, agents, same_neighbours):
-		if len(same_neighbours) > 0 and random() < self.probability_birth * (1 - PolarBear.count / PolarBear.capacity):
-			for nb in same_neighbours:
-				if nb.gender != self.gender:
-					PolarBear.count += 1
-					return True
+		if self.age>self.mating:
+			if len(same_neighbours) > 0 and random() < self.probability_birth * (1 - PolarBear.count / PolarBear.capacity):
+				opp_gender=[ag for ag in same_neighbours if ag.gender!=self.gender]
+				# for nb in same_neighbours: 
+				# 	if nb.gender != self.gender:
+				if len(opp_gender)==0:
+					return False
+				chosen=choice(opp_gender)
+				female= self if self.gender=='f' else chosen
+				xy=PolarBear
+				PolarBear.count += 1
+				return True
+			return False
 		return False
 				
 	def move(self, agents):
