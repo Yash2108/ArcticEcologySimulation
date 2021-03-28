@@ -10,17 +10,22 @@ import matplotlib
 import copy as cp
 
 matplotlib.use('TkAgg')
-		 
+env=[]
+agents=[]
 def initialize():
 	global env, agents
 	env = np.vstack((np.ones((25, 100)), np.zeros((75, 100))))
 	agents = []
+	parents={
+		'm': "Initialized",
+		'f': "Initialized"
+	}
 	for i in range(PolarBear.initial_population // 2):
-		agents.append(PolarBear('m'))
-		agents.append(PolarBear('f'))
+		agents.append(PolarBear('m', parents))
+		agents.append(PolarBear('f', parents))
 	for i in range(RingedSeal.initial_population // 2):
-		agents.append(RingedSeal('m'))	
-		agents.append(RingedSeal('f'))	
+		agents.append(RingedSeal('m', parents))	
+		agents.append(RingedSeal('f', parents))	
 		
 def observe():
 	global env, agents, img_count
