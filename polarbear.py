@@ -56,16 +56,9 @@ class PolarBear(Animal):
  			for i in range(len(neighbours_vector)):
  				neighbours_vector[i] = (neighbours_vector[i] * self.movement_speed) / neighbours_dist[i]
 # 				neighbours_vector[i] = (neighbours_vector[i] * self.movement_speed ** 0.5)
-# 			print(neighbours_vector)
-# 			print(self.x, self.y)
  			self.x, self.y = np.sum(neighbours_vector, axis = 0)
  		else:
  			self.x += uniform(-self.movement_speed, self.movement_speed)
  			self.y += uniform(-self.movement_speed, self.movement_speed)
  		self.x = self.restrict(self.x, 0, 100)
  		self.y = self.restrict(self.y, 0, 100)
-
-# 		same_neighbours = [nb for nb in agents if type(nb).__name__ == name and 
-# 										   (self.x - nb.x) ** 2 + (self.y - nb.y) ** 2 < self.radius_sq]
-# 		self.x = self.restrict(self.x + uniform(-self.movement_speed, self.movement_speed), 0, 100)
-# 		self.y = self.restrict(self.y + uniform(-self.movement_speed, self.movement_speed), 0, 100)

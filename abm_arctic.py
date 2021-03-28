@@ -71,8 +71,6 @@ def update_one_unit_time():
 			i += 1
 
 if __name__ == "__main__":
-	global img_count
-	img_count = 0
 	blue = cm.get_cmap('Blues', 4)
 	cm.register_cmap(name = 'ice', cmap = ListedColormap([blue(0), blue(1)]))
 	matplotlib.rcParams['image.cmap'] = 'ice'
