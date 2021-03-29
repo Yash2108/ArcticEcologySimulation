@@ -4,19 +4,19 @@ from ringedseal import RingedSeal
 from polarbear import PolarBear
 from matplotlib import cm
 import pycxsimulator
-from pylab import *
+# from pylab import *
 import numpy as np
 import matplotlib
+import matplotlib.pyplot as plt
 import copy as cp
 
 matplotlib.use('TkAgg')
-env=[]
-agents=[]
+
 def initialize():
 	global env, agents
-	env = np.vstack((np.ones((25, 100)), np.zeros((75, 100))))
+	env = np.vstack((np.zeros((75, 101)), np.ones((26, 101))))
 	agents = []
-	parents={
+	parents = {
 		'm': "Initialized",
 		'f': "Initialized"
 	}
@@ -28,22 +28,21 @@ def initialize():
 		agents.append(RingedSeal('f', parents))	
 		
 def observe():
-	global env, agents, img_count
-	cla()
-	img_count += 1
-	mng = plt.get_current_fig_manager()
-	mng.window.state('zoomed')
-	imshow(env)
+	global env, agents, fig, axs
+	axs[0].cla()
+	axs[0].imshow(env, origin = 'upper')
 	x = {'PolarBear': [], 'RingedSeal': []}
 	y = {'PolarBear': [], 'RingedSeal': []}
 	for i in agents:
 		name = type(i).__name__
 		x[name].append(i.x)
 		y[name].append(i.y)
-	plot(x['PolarBear'], y['PolarBear'], 'ro', markersize = 8)
-	plot(x['RingedSeal'], y['RingedSeal'], 'yo')
-	axis([0, 100, 100, 0])
-	title("Step: {st}    Ringed Seals: {rs}    Polar Bears: {pb}".format(rs = RingedSeal.count, pb = PolarBear.count, st = img_count))
+	axs[0].plot(x['PolarBear'], y['PolarBear'], 'ro', markersize = 8)
+	axs[0].plot(x['RingedSeal'], y['RingedSeal'], 'yo')
+	axs[0].axis([0, 200, 0, 100])
+# 	axs[0].title("Ringed Seals: {rs}    Polar Bears: {pb}".format(rs = RingedSeal.count, pb = PolarBear.count))
+# 	mng = plt.get_current_fig_manager()
+# 	mng.window.state('zoomed')	
 	
 
 def update(ag):
@@ -53,11 +52,14 @@ def update(ag):
 							  (ag.x - nb.x) ** 2 + (ag.y - nb.y) ** 2 < ag.radius_sq]
 	same_neighbours = [nb for nb in agents if type(nb).__name__ == name and 
 										 (ag.x - nb.x) ** 2 + (ag.y - nb.y) ** 2 < ag.radius_sq]
-	if ag.check_death(agents, neighbours):
-		agents.remove(ag)
+	deaths = ag.check_death(agents, neighbours)
+	if deaths != False:
+		for death in deaths:
+			agents.remove(death)
 		return True
-	elif ag.check_birth(agents, same_neighbours):
-		agents.append(cp.copy(ag))
+	child = ag.check_birth(agents, same_neighbours)
+	if child != False:
+		agents.append(child)
 	ag.age += 1
 	return False
 			
@@ -71,6 +73,8 @@ def update_one_unit_time():
 			i += 1
 
 if __name__ == "__main__":
+	global fig, axs
+	fig, axs = plt.subplots(1, 2, gridspec_kw={'width_ratios': [5, 1]})
 	blue = cm.get_cmap('Blues', 4)
 	cm.register_cmap(name = 'ice', cmap = ListedColormap([blue(0), blue(1)]))
 	matplotlib.rcParams['image.cmap'] = 'ice'
