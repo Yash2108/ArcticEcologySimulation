@@ -11,7 +11,7 @@ class RingedSeal(Animal):
 	#gender, age, probability_death, probability_birth, movement_speed, hunger, radius
 	def __init__(self, gender, parents, age = 2555):
 		super().__init__(gender, 2555, 0.15, 0.3, 0.5, 0, 30, 42, {'m': 1825, 'f': 1095}, parents)
-		self.x = uniform(0, 100)
+		self.x = uniform(0, 200)
 		self.y = self.restrict(100 - exponential(1.95) * 15, 0, 100)
 		self.uid=RingedSeal.count
 		RingedSeal.count += 1
@@ -50,13 +50,12 @@ class RingedSeal(Animal):
 				else:
 					female = chosen
 					male = self
-				RingedSeal.count += 1
 				return self.give_birth(female, male)
 		return False
 				
 	def move(self, agents):
 		if self.age > self.weaning:
-			self.x = self.restrict(self.x + uniform(-self.movement_speed, self.movement_speed), 0, 100)
+			self.x = self.restrict(self.x + uniform(-self.movement_speed, self.movement_speed), 0, 200)
 			self.y = self.restrict(self.y + uniform(-self.movement_speed, self.movement_speed), 0, 100)
 		else:
 			self.x = self.parents['f'].x

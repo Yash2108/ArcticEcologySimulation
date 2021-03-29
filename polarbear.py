@@ -11,7 +11,7 @@ class PolarBear(Animal):
 	
 	#gender, age, probability_death, probability_birth, movement_speed, hunger, radius
 	def __init__(self, gender, parents, age = 2555):
-		self.x = uniform(0, 100)
+		self.x = uniform(0, 200)
 		self.y = uniform(20, 40)
 		super().__init__(gender, age, 0.1, 0.1, 10, 0, 30, 912.5, {'m': 1825, 'f': 1460}, parents)
 		self.uid = PolarBear.count
@@ -51,7 +51,6 @@ class PolarBear(Animal):
 				else:
 					female = chosen
 					male = self
-				PolarBear.count += 1
 				return self.give_birth(female, male)
 		return False
 				
@@ -77,7 +76,7 @@ class PolarBear(Animal):
 	 		else:
 	 			self.x += uniform(-self.movement_speed, self.movement_speed)
 	 			self.y += uniform(-self.movement_speed, self.movement_speed)
-	 		self.x = self.restrict(self.x, 0, 100)
+	 		self.x = self.restrict(self.x, 0, 200)
 	 		self.y = self.restrict(self.y, 0, 100)
 		else:
 			self.x = self.parents['f'].x
