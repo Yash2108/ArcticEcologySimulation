@@ -5,7 +5,7 @@ from numpy.random import exponential
 class RingedSeal(Animal):
 	
 	count = 0
-	initial_population = 100
+	initial_population = 400
 	capacity = 600
 	
 	#gender, age, probability_death, probability_birth, movement_speed, hunger, radius

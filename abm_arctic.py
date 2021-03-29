@@ -12,12 +12,14 @@ from matplotlib import gridspec
 import copy as cp
 from matplotlib.offsetbox import OffsetImage, AnnotationBbox
 from matplotlib.cbook import get_sample_data
+import os
 
 matplotlib.use('TkAgg')
 
 def initialize():
 	global env, agents
-	env = np.vstack((np.zeros((75, 201)), np.ones((26, 201))))
+# 	env = np.vstack((np.zeros((75, 201)), np.ones((26, 201))))
+	env = np.flip(imread(os.path.join(os.getcwd(), "assets\\background_3.png")), axis = 0)
 	agents = []
 	parents = {
 		'm': "Initialized",
@@ -37,15 +39,15 @@ def observe():
 	spec = gridspec.GridSpec(ncols=2, nrows=1, width_ratios=[4, 1])
 	ax0 = fig.add_subplot(spec[0])
 	ax1 = fig.add_subplot(spec[1])
-	ax0.imshow(env, origin = 'upper')
+	ax0.imshow(env)
 	x = {'PolarBear': [], 'RingedSeal': []}
 	y = {'PolarBear': [], 'RingedSeal': []}
 	for i in agents:
 		name = type(i).__name__
 		x[name].append(i.x)
 		y[name].append(i.y)
-	image_path_1 = get_sample_data("C:/Users/Nova/Desktop/polar.png")
-	image_path_2 = get_sample_data("C:/Users/Nova/Desktop/ringedseal.png")
+	image_path_1 = get_sample_data(os.path.join(os.getcwd(), "assets\\polar.png"))
+	image_path_2 = get_sample_data(os.path.join(os.getcwd(), "assets\\ringedseal.png"))
 	imscatter(x['PolarBear'], y['PolarBear'], image_path_1, zoom=0.1, ax=ax0)	
 	imscatter(x['RingedSeal'], y['RingedSeal'], image_path_2, zoom=0.03, ax=ax0)	
 	ax0.plot(x['PolarBear'], y['PolarBear'], 'o')
