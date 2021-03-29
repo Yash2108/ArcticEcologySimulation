@@ -15,11 +15,11 @@ from matplotlib.cbook import get_sample_data
 import os
 
 matplotlib.use('TkAgg')
-
+days=0
 def initialize():
 	global env, agents
 # 	env = np.vstack((np.zeros((75, 201)), np.ones((26, 201))))
-	env = np.flip(imread(os.path.join(os.getcwd(), "assets\\background_3.png")), axis = 0)
+	env = imread(os.path.join(os.getcwd(), "assets\\background_3.png"))
 	agents = []
 	parents = {
 		'm': "Initialized",
@@ -33,13 +33,10 @@ def initialize():
 		agents.append(RingedSeal('f', parents))	
 		
 def observe():
-	global env, agents
+	global env, agents, days
 	clf()
 	fig = gcf()
-	spec = gridspec.GridSpec(ncols=2, nrows=1, width_ratios=[4, 1])
-	ax0 = fig.add_subplot(spec[0])
-	ax1 = fig.add_subplot(spec[1])
-	ax0.imshow(env)
+	# spec = gridspec.GridSpec(ncols=2, nrows=1, width_ratios=[4, 1])
 	x = {'PolarBear': [], 'RingedSeal': []}
 	y = {'PolarBear': [], 'RingedSeal': []}
 	for i in agents:
@@ -48,12 +45,16 @@ def observe():
 		y[name].append(i.y)
 	image_path_1 = get_sample_data(os.path.join(os.getcwd(), "assets\\polar.png"))
 	image_path_2 = get_sample_data(os.path.join(os.getcwd(), "assets\\ringedseal.png"))
+	ax1 = fig.add_subplot(111, label="1")
+	ax0 = fig.add_subplot(111, label="2", frame_on=False)
+	ax1.imshow(env)
+	ax1.set_axis_off()
 	imscatter(x['PolarBear'], y['PolarBear'], image_path_1, zoom=0.1, ax=ax0)	
 	imscatter(x['RingedSeal'], y['RingedSeal'], image_path_2, zoom=0.03, ax=ax0)	
 	ax0.plot(x['PolarBear'], y['PolarBear'], 'o')
 	ax0.plot(x['RingedSeal'], y['RingedSeal'], 'o')
-	ax0.axis([0, 200, 0, 100])
-	ax0.set_title("Ringed Seals: {rs}    Polar Bears: {pb}".format(rs = RingedSeal.count, pb = PolarBear.count))
+	# ax0.axis([0, 200, 0, 100])
+	ax0.set_title("Day Number: {day}    Ringed Seals: {rs}    Polar Bears: {pb}".format(day=days, rs = RingedSeal.count, pb = PolarBear.count))
 	mng = plt.get_current_fig_manager()
 	mng.window.state('zoomed')	
 
@@ -94,13 +95,14 @@ def update(ag):
 	return False
 			
 def update_one_unit_time():
-	global agents
+	global agents, days
 	for ag in agents:
 		ag.move(agents)
 	i = 0
 	while i < len(agents):
 		if not update(agents[i]):
 			i += 1
+	days+=1
 
 if __name__ == "__main__":
 # 	global fig, axs
