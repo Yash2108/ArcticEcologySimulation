@@ -18,7 +18,11 @@ class PolarBear(Animal):
 		PolarBear.count += 1
 		
 	def check_death(self, agents, neighbours):
-		if len(neighbours) == 0 and random() < self.probability_death and self.age > self.weaning:
+		rs=[]
+		for i in neighbours:
+			if i.__class__.__name__=="RingedSeal":
+				rs.append(i)
+		if len(rs) == 0 and random() < self.probability_death and self.age > self.weaning:
 			deaths = []
 			deaths.append(self)
 			PolarBear.count -= 1
