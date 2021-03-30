@@ -59,12 +59,12 @@ class PolarBear(Animal):
 		return False
 				
 	def move(self, agents):
-		if self.age > self.weaning or self.parents['f']=="Initialized":
+		if self.age > self.weaning:
 	 		name = 'PolarBear'
 	 		neighbours_vector = []
 	 		neighbours_dist = []
 	 		for nb in agents:
-	 			if type(nb).__name__ != name:
+	 			if type(nb).__name__ == 'RingedSeal':
 	 				neighbours_vector.append([nb.x - self.x, nb.y - self.y])
 	 				neighbours_dist.append(neighbours_vector[-1][0] ** 2 + neighbours_vector[-1][1] ** 2)
 	 				if neighbours_dist[-1] >= self.radius_sq:
@@ -74,7 +74,7 @@ class PolarBear(Animal):
 	 			neighbours_vector = np.array(neighbours_vector)
 	 			neigbours_dist = np.array(neighbours_dist)
 	 			for i in range(len(neighbours_vector)):
-	 				neighbours_vector[i] = (neighbours_vector[i] * self.movement_speed * self.radius_sq) / (neighbours_dist[i] ** 0.5 * neighbours_dist[i])
+	 				((neighbours_vector[i]) / (neighbours_dist[i] ** 0.5)) * (1 - (neighbours_dist[i] / self.radius_sq)) * self.movement_speed
 	# 				neighbours_vector[i] = (neighbours_vector[i] * self.movement_speed ** 0.5)
 	 			self.x, self.y = np.sum(neighbours_vector, axis = 0)
 	 		else:

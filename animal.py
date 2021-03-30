@@ -31,8 +31,8 @@ class Animal(ABC):
 	
 	def restrict(self, n, min_, max_):
 		n = max(min(max_, n), min_)
-		if n == 100:
+		if n == max_:
 			n -= uniform(0, self.movement_speed * 10)
-		elif n == 0:
+		elif n == min_:
 			n += uniform(0, self.movement_speed * 10)
 		return n

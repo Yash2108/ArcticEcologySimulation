@@ -58,7 +58,7 @@ class RingedSeal(Animal):
 		return False
 				
 	def move(self, agents):
-		if self.age > self.weaning or self.parents['f']=="Initialized":
+		if self.age > self.weaning:
 			self.x = self.restrict(self.x + uniform(-self.movement_speed, self.movement_speed), 0, 200)
 			self.y = self.restrict(self.y + uniform(-self.movement_speed, self.movement_speed), 0, 100)
 		else:

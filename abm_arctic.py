@@ -32,9 +32,17 @@ def initialize():
 	for i in range(RingedSeal.initial_population // 2):
 		agents.append(RingedSeal('m', parents))	
 		agents.append(RingedSeal('f', parents))	
+	ag=Walrus('m', parents)
+	agents.append(ag)
 	for i in range(Walrus.initial_population // 2):
-		agents.append(Walrus('m', parents))	
-		agents.append(Walrus('f', parents))	
+		ag1=Walrus('m', parents, ag.group_id)
+		ag1.x=ag.x+uniform(-4,4)
+		ag1.y=ag.y+uniform(-4,4)
+		agents.append(ag1)
+		ag1=Walrus('f', parents, ag.group_id)
+		ag1.x=ag.x+uniform(-4,4)
+		ag1.y=ag.y+uniform(-4,4)	
+		agents.append(ag1)	
 		
 		
 def observe():
@@ -55,9 +63,9 @@ def observe():
 	ax0 = fig.add_subplot(111, label="2", frame_on=False)
 	ax1.imshow(env)
 	ax1.set_axis_off()
-	imscatter(x['PolarBear'], y['PolarBear'], image_path_1, zoom=0.1, ax=ax0)	
-	imscatter(x['RingedSeal'], y['RingedSeal'], image_path_2, zoom=0.03, ax=ax0)	
-	imscatter(x['Walrus'], y['Walrus'], image_path_3, zoom=0.03, ax=ax0)	
+	# imscatter(x['PolarBear'], y['PolarBear'], image_path_1, zoom=0.1, ax=ax0)	
+	# imscatter(x['RingedSeal'], y['RingedSeal'], image_path_2, zoom=0.03, ax=ax0)	
+	# imscatter(x['Walrus'], y['Walrus'], image_path_3, zoom=0.03, ax=ax0)	
 	ax0.plot(x['PolarBear'], y['PolarBear'], 'o')
 	ax0.plot(x['RingedSeal'], y['RingedSeal'], 'o')
 	ax0.plot(x['Walrus'], y['Walrus'], 'o')
@@ -111,6 +119,9 @@ def update_one_unit_time():
 		if not update(agents[i]):
 			i += 1
 	days+=1
+	for i in Walrus.group_dict:
+		Walrus.group_dict[i]['moved']=False
+
 
 if __name__ == "__main__":
 # 	global fig, axs
