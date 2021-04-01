@@ -69,9 +69,9 @@ def observe():
 	for i in population:
 		cumulative_population[i].append(population[i])
 	print(cumulative_population)
-	# image_path_1 = get_sample_data(os.path.join(os.getcwd(), "assets\\polar.png"))
-	# image_path_2 = get_sample_data(os.path.join(os.getcwd(), "assets\\ringedseal.png"))
-	# image_path_3 = get_sample_data(os.path.join(os.getcwd(), "assets\\walrus.png"))
+	image_path_1 = get_sample_data(os.path.join(os.getcwd(), "assets\\polar.png"))
+	image_path_2 = get_sample_data(os.path.join(os.getcwd(), "assets\\ringedseal.png"))
+	image_path_3 = get_sample_data(os.path.join(os.getcwd(), "assets\\walrus.png"))
 	day_axis=[0]+list(range(1,days+1))
 	# if days==0:
 	# 	day_axis=[0]
@@ -85,9 +85,9 @@ def observe():
 	ax1.imshow(env)
 	ax1.set_axis_off()
 	ax1.set_aspect(0.84)
-	# imscatter(x['PolarBear'], y['PolarBear'], image_path_1, zoom=0.1, ax=ax0)	
-	# imscatter(x['RingedSeal'], y['RingedSeal'], image_path_2, zoom=0.03, ax=ax0)	
-	# imscatter(x['Walrus'], y['Walrus'], image_path_3, zoom=0.03, ax=ax0)	
+	imscatter(x['PolarBear'], y['PolarBear'], image_path_1, zoom=0.1, ax=ax0)	
+	imscatter(x['RingedSeal'], y['RingedSeal'], image_path_2, zoom=0.03, ax=ax0)	
+	imscatter(x['Walrus'], y['Walrus'], image_path_3, zoom=0.03, ax=ax0)	
 	ax0.plot(x['PolarBear'], y['PolarBear'], 'o')
 	ax0.plot(x['Walrus'], y['Walrus'], 'o')
 	ax0.plot(x['RingedSeal'], y['RingedSeal'], 'o')
