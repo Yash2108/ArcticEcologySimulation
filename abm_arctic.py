@@ -10,8 +10,6 @@ import matplotlib
 import matplotlib.pyplot as plt
 from matplotlib import gridspec
 import copy as cp
-from matplotlib.offsetbox import OffsetImage, AnnotationBbox
-from matplotlib.cbook import get_sample_data
 
 matplotlib.use('TkAgg')
 
@@ -44,34 +42,13 @@ def observe():
 		name = type(i).__name__
 		x[name].append(i.x)
 		y[name].append(i.y)
-	image_path_1 = get_sample_data("C:/Users/Nova/Desktop/polar.png")
-	image_path_2 = get_sample_data("C:/Users/Nova/Desktop/ringedseal.png")
-	imscatter(x['PolarBear'], y['PolarBear'], image_path_1, zoom=0.1, ax=ax0)	
-	imscatter(x['RingedSeal'], y['RingedSeal'], image_path_2, zoom=0.03, ax=ax0)	
-	ax0.plot(x['PolarBear'], y['PolarBear'], 'o')
-	ax0.plot(x['RingedSeal'], y['RingedSeal'], 'o')
+	ax0.plot(x['PolarBear'], y['PolarBear'], 'ro', markersize = 8)
+	ax0.plot(x['RingedSeal'], y['RingedSeal'], 'yo')
 	ax0.axis([0, 200, 0, 100])
 	ax0.set_title("Ringed Seals: {rs}    Polar Bears: {pb}".format(rs = RingedSeal.count, pb = PolarBear.count))
 	mng = plt.get_current_fig_manager()
 	mng.window.state('zoomed')	
-
-def imscatter(x, y, image, ax=None, zoom=1):
-    if ax is None:
-        ax = plt.gca()
-    try:
-        image = plt.imread(image)
-    except TypeError:
-        # Likely already an array...
-        pass
-    im = OffsetImage(image, zoom=zoom)
-    x, y = np.atleast_1d(x, y)
-    artists = []
-    for x0, y0 in zip(x, y):
-        ab = AnnotationBbox(im, (x0, y0), xycoords='data', frameon=False)
-        artists.append(ax.add_artist(ab))
-    ax.update_datalim(np.column_stack([x, y]))
-    ax.autoscale()
-    return artists	
+	
 
 def update(ag):
 	global agents
