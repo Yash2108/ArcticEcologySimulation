@@ -14,9 +14,14 @@ import copy as cp
 from matplotlib.offsetbox import OffsetImage, AnnotationBbox
 from matplotlib.cbook import get_sample_data
 import os
+from matplotlib import gridspec
 
 matplotlib.use('TkAgg')
 days=0
+cumulative_population = {'PolarBear': [], 'RingedSeal': [], "Walrus": []}
+
+
+
 def initialize():
 	global env, agents
 # 	env = np.vstack((np.zeros((75, 201)), np.ones((26, 201))))
@@ -44,23 +49,39 @@ def initialize():
 		ag1.y=ag.y+uniform(-4,4)	
 		agents.append(ag1)	
 		
-		
+spec = gridspec.GridSpec(ncols=2, nrows=1, width_ratios=[3, 1])
+
+	
 def observe():
-	global env, agents, days
+	global env, agents, days, cumulative_population, spec
 	clf()
 	fig = gcf()
+
 	# spec = gridspec.GridSpec(ncols=2, nrows=1, width_ratios=[4, 1])
 	x = {'PolarBear': [], 'RingedSeal': [], "Walrus":[]}
 	y = {'PolarBear': [], 'RingedSeal': [], "Walrus":[]}
+	population = {'PolarBear': 0, 'RingedSeal': 0, "Walrus": 0}
 	for i in agents:
 		name = type(i).__name__
 		x[name].append(i.x)
 		y[name].append(i.y)
+		population[name]+=1
+	for i in population:
+		cumulative_population[i].append(population[i])
+	print(cumulative_population)
 	image_path_1 = get_sample_data(os.path.join(os.getcwd(), "assets\\polar.png"))
 	image_path_2 = get_sample_data(os.path.join(os.getcwd(), "assets\\ringedseal.png"))
 	image_path_3 = get_sample_data(os.path.join(os.getcwd(), "assets\\walrus.png"))
-	ax1 = fig.add_subplot(111, label="1")
-	ax0 = fig.add_subplot(111, label="2", frame_on=False)
+	day_axis=[0]+list(range(1,days+1))
+	# if days==0:
+	# 	day_axis=[0]
+	# else:
+	# 	day_axis=list(range(days))
+	ax1 = fig.add_subplot(spec[0], label="1")
+	ax0 = fig.add_subplot(spec[0], label="2", frame_on=False)
+	ax2 = fig.add_subplot(spec[1], label="3")
+	ax3 = fig.add_subplot(spec[1], label="4", frame_on=False)
+	ax4 = fig.add_subplot(spec[1], label="4", frame_on=False)
 	ax1.imshow(env)
 	ax1.set_axis_off()
 	ax1.set_aspect(0.84)
@@ -68,11 +89,37 @@ def observe():
 	imscatter(x['RingedSeal'], y['RingedSeal'], image_path_2, zoom=0.03, ax=ax0)	
 	imscatter(x['Walrus'], y['Walrus'], image_path_3, zoom=0.03, ax=ax0)	
 	ax0.plot(x['PolarBear'], y['PolarBear'], 'o')
-	ax0.plot(x['RingedSeal'], y['RingedSeal'], 'o')
 	ax0.plot(x['Walrus'], y['Walrus'], 'o')
+	ax0.plot(x['RingedSeal'], y['RingedSeal'], 'o')
 	ax0.axis([0, 200, 0, 100])
 	ax0.set_title("Day Number: {day}    Ringed Seals: {rs}    Polar Bears: {pb}, Walrus: {wl}".format(day=days, rs = RingedSeal.count, pb = PolarBear.count, wl=Walrus.count))
 	ax0.set_aspect(0.935)
+
+
+	l2,=ax2.plot(day_axis, cumulative_population['RingedSeal'], color="C1", label="Ringed Seals")
+	ax2.tick_params(axis='x', colors="C1")
+	ax2.tick_params(axis='y', colors="C1", pad=5)
+	ax2.set_xlabel("Day Number")
+	ax2.set_ylabel("Ringed Seals")
+
+	l3,=ax3.plot(day_axis, cumulative_population['PolarBear'], color="C0", label="Polar Bears")
+	ax3.tick_params(axis='x', colors="C0")
+	ax3.tick_params(axis='y', colors="C0")
+	ax3.yaxis.tick_right()
+	ax3.set_xlabel("Day Number")
+	ax3.set_ylabel("Polar Bear and Walrus")
+	ax3.yaxis.set_label_position('right') 
+	
+	l4,=ax4.plot(day_axis, cumulative_population['Walrus'], color="C2", label="Walrus")
+	ax4.tick_params(axis='x', colors="C2")
+	ax4.tick_params(axis='y', colors="C2")
+	# ax4.set_axis_off()
+	ax2.legend([l2,l3,l4], ['Ringed Seals',"Polar Bear"," Walrus"], loc="lower right")
+
+
+	plt.subplots_adjust(right=0.95)
+	# ax4.ytick.set_pad(15)
+	# ax4.set_axis_off()
 	mng = plt.get_current_fig_manager()
 	mng.window.state('zoomed')	
 	savefig('plot' + str(days) + '.png')
