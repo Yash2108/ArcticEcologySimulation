@@ -55,7 +55,7 @@ class PolarBear(Animal):
 		return False
 				
 	def move(self, agents):
-		if self.age > self.weaning or self.parents['f']=="Initialized":
+		if self.age > self.weaning:
 	 		name = 'PolarBear'
 	 		neighbours_vector = []
 	 		neighbours_dist = []

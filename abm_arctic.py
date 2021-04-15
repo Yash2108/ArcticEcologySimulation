@@ -2,7 +2,6 @@ from matplotlib.colors import ListedColormap
 from random import randint, uniform
 from ringedseal import RingedSeal
 from polarbear import PolarBear
-from walrus import Walrus
 from matplotlib import cm
 import pycxsimulator
 from pylab import *
@@ -32,37 +31,30 @@ def initialize():
 	for i in range(RingedSeal.initial_population // 2):
 		agents.append(RingedSeal('m', parents))	
 		agents.append(RingedSeal('f', parents))	
-	for i in range(Walrus.initial_population // 2):
-		agents.append(Walrus('m', parents))	
-		agents.append(Walrus('f', parents))	
-		
 		
 def observe():
 	global env, agents, days
 	clf()
 	fig = gcf()
 	# spec = gridspec.GridSpec(ncols=2, nrows=1, width_ratios=[4, 1])
-	x = {'PolarBear': [], 'RingedSeal': [], "Walrus":[]}
-	y = {'PolarBear': [], 'RingedSeal': [], "Walrus":[]}
+	x = {'PolarBear': [], 'RingedSeal': []}
+	y = {'PolarBear': [], 'RingedSeal': []}
 	for i in agents:
 		name = type(i).__name__
 		x[name].append(i.x)
 		y[name].append(i.y)
 	image_path_1 = get_sample_data(os.path.join(os.getcwd(), "assets\\polar.png"))
 	image_path_2 = get_sample_data(os.path.join(os.getcwd(), "assets\\ringedseal.png"))
-	image_path_3 = get_sample_data(os.path.join(os.getcwd(), "assets\\walrus.png"))
 	ax1 = fig.add_subplot(111, label="1")
 	ax0 = fig.add_subplot(111, label="2", frame_on=False)
 	ax1.imshow(env)
 	ax1.set_axis_off()
 	imscatter(x['PolarBear'], y['PolarBear'], image_path_1, zoom=0.1, ax=ax0)	
 	imscatter(x['RingedSeal'], y['RingedSeal'], image_path_2, zoom=0.03, ax=ax0)	
-	imscatter(x['Walrus'], y['Walrus'], image_path_3, zoom=0.03, ax=ax0)	
 	ax0.plot(x['PolarBear'], y['PolarBear'], 'o')
 	ax0.plot(x['RingedSeal'], y['RingedSeal'], 'o')
-	ax0.plot(x['Walrus'], y['Walrus'], 'o')
 	# ax0.axis([0, 200, 0, 100])
-	ax0.set_title("Day Number: {day}    Ringed Seals: {rs}    Polar Bears: {pb}, Walrus: {wl}".format(day=days, rs = RingedSeal.count, pb = PolarBear.count, wl=Walrus.count))
+	ax0.set_title("Day Number: {day}    Ringed Seals: {rs}    Polar Bears: {pb}".format(day=days, rs = RingedSeal.count, pb = PolarBear.count))
 	mng = plt.get_current_fig_manager()
 	mng.window.state('zoomed')	
 
