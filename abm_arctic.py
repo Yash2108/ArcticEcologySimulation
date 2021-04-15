@@ -63,19 +63,16 @@ def observe():
 	ax0 = fig.add_subplot(111, label="2", frame_on=False)
 	ax1.imshow(env)
 	ax1.set_axis_off()
-	ax1.set_aspect(0.84)
-	imscatter(x['PolarBear'], y['PolarBear'], image_path_1, zoom=0.1, ax=ax0)	
-	imscatter(x['RingedSeal'], y['RingedSeal'], image_path_2, zoom=0.03, ax=ax0)	
-	imscatter(x['Walrus'], y['Walrus'], image_path_3, zoom=0.03, ax=ax0)	
+	# imscatter(x['PolarBear'], y['PolarBear'], image_path_1, zoom=0.1, ax=ax0)	
+	# imscatter(x['RingedSeal'], y['RingedSeal'], image_path_2, zoom=0.03, ax=ax0)	
+	# imscatter(x['Walrus'], y['Walrus'], image_path_3, zoom=0.03, ax=ax0)	
 	ax0.plot(x['PolarBear'], y['PolarBear'], 'o')
 	ax0.plot(x['RingedSeal'], y['RingedSeal'], 'o')
 	ax0.plot(x['Walrus'], y['Walrus'], 'o')
-	ax0.axis([0, 200, 0, 100])
+	# ax0.axis([0, 200, 0, 100])
 	ax0.set_title("Day Number: {day}    Ringed Seals: {rs}    Polar Bears: {pb}, Walrus: {wl}".format(day=days, rs = RingedSeal.count, pb = PolarBear.count, wl=Walrus.count))
-	ax0.set_aspect(0.935)
 	mng = plt.get_current_fig_manager()
 	mng.window.state('zoomed')	
-	savefig('plot' + str(days) + '.png')
 
 def imscatter(x, y, image, ax=None, zoom=1):
     if ax is None:
