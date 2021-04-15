@@ -4,18 +4,17 @@ from ringedseal import RingedSeal
 from polarbear import PolarBear
 from matplotlib import cm
 import pycxsimulator
-from pylab import *
+# from pylab import *
 import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
-from matplotlib import gridspec
 import copy as cp
 
 matplotlib.use('TkAgg')
 
 def initialize():
 	global env, agents
-	env = np.vstack((np.zeros((75, 201)), np.ones((26, 201))))
+	env = np.vstack((np.zeros((75, 101)), np.ones((26, 101))))
 	agents = []
 	parents = {
 		'm': "Initialized",
@@ -29,25 +28,21 @@ def initialize():
 		agents.append(RingedSeal('f', parents))	
 		
 def observe():
-	global env, agents
-	clf()
-	fig = gcf()
-	spec = gridspec.GridSpec(ncols=2, nrows=1, width_ratios=[4, 1])
-	ax0 = fig.add_subplot(spec[0])
-	ax1 = fig.add_subplot(spec[1])
-	ax0.imshow(env, origin = 'upper')
+	global env, agents, fig, axs
+	axs[0].cla()
+	axs[0].imshow(env, origin = 'upper')
 	x = {'PolarBear': [], 'RingedSeal': []}
 	y = {'PolarBear': [], 'RingedSeal': []}
 	for i in agents:
 		name = type(i).__name__
 		x[name].append(i.x)
 		y[name].append(i.y)
-	ax0.plot(x['PolarBear'], y['PolarBear'], 'ro', markersize = 8)
-	ax0.plot(x['RingedSeal'], y['RingedSeal'], 'yo')
-	ax0.axis([0, 200, 0, 100])
-	ax0.set_title("Ringed Seals: {rs}    Polar Bears: {pb}".format(rs = RingedSeal.count, pb = PolarBear.count))
-	mng = plt.get_current_fig_manager()
-	mng.window.state('zoomed')	
+	axs[0].plot(x['PolarBear'], y['PolarBear'], 'ro', markersize = 8)
+	axs[0].plot(x['RingedSeal'], y['RingedSeal'], 'yo')
+	axs[0].axis([0, 200, 0, 100])
+# 	axs[0].title("Ringed Seals: {rs}    Polar Bears: {pb}".format(rs = RingedSeal.count, pb = PolarBear.count))
+# 	mng = plt.get_current_fig_manager()
+# 	mng.window.state('zoomed')	
 	
 
 def update(ag):
@@ -78,8 +73,8 @@ def update_one_unit_time():
 			i += 1
 
 if __name__ == "__main__":
-# 	global fig, axs
-# 	fig, axs = plt.subplots(1, 2, gridspec_kw={'width_ratios': [5, 1]})
+	global fig, axs
+	fig, axs = plt.subplots(1, 2, gridspec_kw={'width_ratios': [5, 1]})
 	blue = cm.get_cmap('Blues', 4)
 	cm.register_cmap(name = 'ice', cmap = ListedColormap([blue(0), blue(1)]))
 	matplotlib.rcParams['image.cmap'] = 'ice'
