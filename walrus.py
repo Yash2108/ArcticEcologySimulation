@@ -20,18 +20,19 @@ class Walrus(Animal):
 	def check_death(self, agents, neighbours):
 		pbs=[]
 		for i in neighbours:
-			if i.__class__.__name__=="PolarBear":
+			if i.__name__=="PolarBear":
 				pbs.append(i)
 		if len(pbs) == 0 and random() < self.probability_death and self.age > self.weaning:
 			deaths = []
 			deaths.append(self)
 			Walrus.count -= 1
-			# if len(self.children)!=0:
-			for child in self.children:
-				if child.age < child.weaning:
-					deaths.append(child)
-					Walrus.count -= 1
-			return deaths
+			if len(self.children)!=0:
+				for child in self.children:
+					if child.age < child.weaning:
+						deaths.append(child)
+						Walrus.count -= 1
+				return deaths
+			return True
 		return False
 			
 	def give_birth(self, female, male):

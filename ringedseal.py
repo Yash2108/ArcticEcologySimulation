@@ -17,11 +17,7 @@ class RingedSeal(Animal):
 		RingedSeal.count += 1
 		
 	def check_death(self, agents, neighbours):
-		pbs=[]
-		for i in neighbours:
-			if i.__class__.__name__=="PolarBear":
-				pbs.append(i)
-		if len(pbs) > 0 and random() < self.probability_death and self.age > self.weaning:
+		if len(neighbours) > 0 and random() < self.probability_death and self.age > self.weaning:
 			deaths = []
 			deaths.append(self)
 			RingedSeal.count -= 1
