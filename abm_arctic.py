@@ -4,10 +4,9 @@ from ringedseal import RingedSeal
 from polarbear import PolarBear
 from matplotlib import cm
 import pycxsimulator
-# from pylab import *
+from pylab import *
 import numpy as np
 import matplotlib
-import matplotlib.pyplot as plt
 import copy as cp
 
 matplotlib.use('TkAgg')
@@ -28,21 +27,22 @@ def initialize():
 		agents.append(RingedSeal('f', parents))	
 		
 def observe():
-	global env, agents, fig, axs
-	axs[0].cla()
-	axs[0].imshow(env, origin = 'upper')
+	global env, agents, img_count
+	cla()
+	img_count += 1
+	mng = plt.get_current_fig_manager()
+	mng.window.state('zoomed')
+	imshow(env)
 	x = {'PolarBear': [], 'RingedSeal': []}
 	y = {'PolarBear': [], 'RingedSeal': []}
 	for i in agents:
 		name = type(i).__name__
 		x[name].append(i.x)
 		y[name].append(i.y)
-	axs[0].plot(x['PolarBear'], y['PolarBear'], 'ro', markersize = 8)
-	axs[0].plot(x['RingedSeal'], y['RingedSeal'], 'yo')
-	axs[0].axis([0, 200, 0, 100])
-# 	axs[0].title("Ringed Seals: {rs}    Polar Bears: {pb}".format(rs = RingedSeal.count, pb = PolarBear.count))
-# 	mng = plt.get_current_fig_manager()
-# 	mng.window.state('zoomed')	
+	plot(x['PolarBear'], y['PolarBear'], 'ro', markersize = 8)
+	plot(x['RingedSeal'], y['RingedSeal'], 'yo')
+	axis([0, 100, 100, 0])
+	title("Step: {st}    Ringed Seals: {rs}    Polar Bears: {pb}".format(rs = RingedSeal.count, pb = PolarBear.count, st = img_count))
 	
 
 def update(ag):
@@ -73,8 +73,6 @@ def update_one_unit_time():
 			i += 1
 
 if __name__ == "__main__":
-	global fig, axs
-	fig, axs = plt.subplots(1, 2, gridspec_kw={'width_ratios': [5, 1]})
 	blue = cm.get_cmap('Blues', 4)
 	cm.register_cmap(name = 'ice', cmap = ListedColormap([blue(0), blue(1)]))
 	matplotlib.rcParams['image.cmap'] = 'ice'
