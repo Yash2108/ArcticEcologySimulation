@@ -32,7 +32,7 @@ def observe():
 	img_count += 1
 	mng = plt.get_current_fig_manager()
 	mng.window.state('zoomed')
-	imshow(env)
+	imshow(env, origin = 'upper')
 	x = {'PolarBear': [], 'RingedSeal': []}
 	y = {'PolarBear': [], 'RingedSeal': []}
 	for i in agents:
@@ -41,7 +41,7 @@ def observe():
 		y[name].append(i.y)
 	plot(x['PolarBear'], y['PolarBear'], 'ro', markersize = 8)
 	plot(x['RingedSeal'], y['RingedSeal'], 'yo')
-	axis([0, 100, 100, 0])
+	axis([0, 100, 0, 100])
 	title("Step: {st}    Ringed Seals: {rs}    Polar Bears: {pb}".format(rs = RingedSeal.count, pb = PolarBear.count, st = img_count))
 	
 
@@ -73,6 +73,7 @@ def update_one_unit_time():
 			i += 1
 
 if __name__ == "__main__":
+	img_count = 0
 	blue = cm.get_cmap('Blues', 4)
 	cm.register_cmap(name = 'ice', cmap = ListedColormap([blue(0), blue(1)]))
 	matplotlib.rcParams['image.cmap'] = 'ice'
