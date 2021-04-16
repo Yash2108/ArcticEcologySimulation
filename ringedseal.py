@@ -58,7 +58,6 @@ class RingedSeal(Animal):
 				else:
 					female = chosen
 					male = self
-				RingedSeal.count += 1
 				return self.give_birth(female, male)
 		return False
 				

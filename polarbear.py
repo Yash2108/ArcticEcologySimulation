@@ -59,7 +59,6 @@ class PolarBear(Animal):
 				else:
 					female = chosen
 					male = self
-				PolarBear.count += 1
 				return self.give_birth(female, male)
 		return False
 				
