@@ -66,7 +66,5 @@ class RingedSeal(Animal):
 			self.x = self.restrict(self.x + uniform(-self.movement_speed, self.movement_speed), 0, 100)
 			self.y = self.restrict(self.y + uniform(-self.movement_speed, self.movement_speed), 0, 100)
 		else:
-# 			self.x = self.parents['f'].x
-# 			self.y = self.parents['f'].y
-			self.x = self.restrict(self.x + uniform(-self.movement_speed, self.movement_speed), 0, 100)
-			self.y = self.restrict(self.y + uniform(-self.movement_speed, self.movement_speed), 0, 100)
+ 			self.x = self.parents['f'].x
+ 			self.y = self.parents['f'].y
