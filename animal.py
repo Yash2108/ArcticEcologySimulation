@@ -3,7 +3,8 @@ from numpy.random import normal
 from abc import ABC, abstractmethod
 
 class Animal(ABC):
-	def __init__(self, gender, age, probability_death, probability_birth, movement_speed, hunger, radius, weaning, mating, parents):
+	def __init__(self, gender, age, probability_death, probability_birth, 
+							 movement_speed, hunger, radius, weaning, mating, parents):
 		self.gender = gender
 		self.age = age
 		self.probability_death = probability_death
@@ -12,10 +13,10 @@ class Animal(ABC):
 		self.hunger = hunger
 		self.radius = radius
 		self.radius_sq = self.radius ** 2
-		self.weaning=weaning
-		self.mating=mating[gender]
-		self.parents=parents
-		self.children=[]
+		self.weaning = weaning
+		self.mating = mating[gender]
+		self.parents = parents
+		self.children = []
 		
 	@abstractmethod
 	def check_death(self):

@@ -30,8 +30,8 @@ def observe():
 	global env, agents, img_count
 	cla()
 	img_count += 1
-	mng = plt.get_current_fig_manager()
-	mng.window.state('zoomed')
+# 	mng = plt.get_current_fig_manager()
+# 	mng.window.state('zoomed')
 	imshow(env, origin = 'upper')
 	x = {'PolarBear': [], 'RingedSeal': []}
 	y = {'PolarBear': [], 'RingedSeal': []}
@@ -42,7 +42,14 @@ def observe():
 	plot(x['PolarBear'], y['PolarBear'], 'ro', markersize = 8)
 	plot(x['RingedSeal'], y['RingedSeal'], 'yo')
 	axis([0, 100, 0, 100])
-	title("Step: {st}    Ringed Seals: {rs}    Polar Bears: {pb}".format(rs = RingedSeal.count, pb = PolarBear.count, st = img_count))
+	rr_count = 0
+	pp_count = 0
+	for i in agents:
+		if type(i).__name__ == 'RingedSeal':
+			rr_count += 1
+		elif type(i).__name__ == 'PolarBear':
+			pp_count += 1
+	title("Step: {st}    Ringed Seals: {rs}    Polar Bears: {pb}     Ringed: {rr}     Polar: {pp}".format(rs = RingedSeal.count, pb = PolarBear.count, st = img_count , rr = rr_count, pp = pp_count))
 	
 
 def update(ag):

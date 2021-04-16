@@ -8,12 +8,20 @@ class RingedSeal(Animal):
 	initial_population = 400
 	capacity = 600
 	
-	#gender, age, probability_death, probability_birth, movement_speed, hunger, radius
 	def __init__(self, gender, parents, age = 2555):
-		super().__init__(gender, 2555, 0.15, 0.3, 0.5, 0, 30, 42, {'m': 1825, 'f': 1095}, parents)
+		super().__init__(gender = gender, 
+										 age = age, 
+										 probability_death = 0.15, 
+										 probability_birth = 0.3, 
+										 movement_speed = 0.5, 
+										 hunger = 0, 
+										 radius = 30, 
+										 weaning = 42, 
+										 mating = {'m': 1825, 'f': 1095}, 
+										 parents = parents)
 		self.x = uniform(0, 100)
-		self.y = self.restrict(100 - exponential(1.95) * 15, 0, 100)
-		self.uid=RingedSeal.count
+		self.y = self.restrict(100 - exponential(1.65) * 15, 0, 100)
+		self.uid = RingedSeal.count
 		RingedSeal.count += 1
 		
 	def check_death(self, agents, neighbours):
@@ -59,5 +67,7 @@ class RingedSeal(Animal):
 			self.x = self.restrict(self.x + uniform(-self.movement_speed, self.movement_speed), 0, 100)
 			self.y = self.restrict(self.y + uniform(-self.movement_speed, self.movement_speed), 0, 100)
 		else:
-			self.x = self.parents['f'].x
-			self.y = self.parents['f'].y
+# 			self.x = self.parents['f'].x
+# 			self.y = self.parents['f'].y
+			self.x = self.restrict(self.x + uniform(-self.movement_speed, self.movement_speed), 0, 100)
+			self.y = self.restrict(self.y + uniform(-self.movement_speed, self.movement_speed), 0, 100)
