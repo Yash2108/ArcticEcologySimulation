@@ -19,7 +19,8 @@ class PolarBear(Animal):
 										 radius = 30, 
 										 weaning = 912.5, 
 										 mating = {'m': 1825, 'f': 1460}, 
-										 parents = parents)
+										 parents = parents,
+										 pregnancy=[195, 265])
 		self.x = uniform(0, 100)
 		self.y = uniform(20, 40)
 		self.uid = PolarBear.count
@@ -37,7 +38,13 @@ class PolarBear(Animal):
 			return deaths
 		return False
 			
-	def give_birth(self, female, male):
+	def give_birth(self, chosen):
+		if self.gender == 'f':
+			female = self
+			male = chosen
+		else:
+			female = chosen
+			male = self
 		parents = {
 			'f': female,
 			'm': male
@@ -53,13 +60,7 @@ class PolarBear(Animal):
 				if len(opp_gender) == 0:
 					return False
 				chosen = choice(opp_gender)
-				if self.gender == 'f':
-					female = self
-					male = chosen
-				else:
-					female = chosen
-					male = self
-				return self.give_birth(female, male)
+				return chosen
 		return False
 				
 	def move(self, agents):

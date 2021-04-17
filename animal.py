@@ -4,7 +4,7 @@ from abc import ABC, abstractmethod
 
 class Animal(ABC):
 	def __init__(self, gender, age, probability_death, probability_birth, 
-							 movement_speed, hunger, radius, weaning, mating, parents):
+							 movement_speed, hunger, radius, weaning, mating, parents, pregnancy):
 		self.gender = gender
 		self.age = age
 		self.probability_death = probability_death
@@ -16,6 +16,10 @@ class Animal(ABC):
 		self.weaning = weaning
 		self.mating = mating[gender]
 		self.parents = parents
+		self.isPregnant=False
+		self.daysBeforeBirth=None
+		self.pregnancy=pregnancy
+		self.partner=None
 		self.children = []
 		
 	@abstractmethod

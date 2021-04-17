@@ -18,7 +18,8 @@ class RingedSeal(Animal):
 										 radius = 30, 
 										 weaning = 42, 
 										 mating = {'m': 1825, 'f': 1095}, 
-										 parents = parents)
+										 parents = parents,
+										 pregnancy=[270,270])
 		self.x = uniform(0, 100)
 		self.y = self.restrict(100 - exponential(1.65) * 15, 0, 100)
 		self.uid = RingedSeal.count
@@ -36,7 +37,13 @@ class RingedSeal(Animal):
 			return deaths
 		return False
 	
-	def give_birth(self, female, male):
+	def give_birth(self, chosen):
+		if self.gender == 'f':
+			female = self
+			male = chosen
+		else:
+			female = chosen
+			male = self
 		parents = {
 			'm': male,
 			'f': female
@@ -58,7 +65,7 @@ class RingedSeal(Animal):
 				else:
 					female = chosen
 					male = self
-				return self.give_birth(female, male)
+				return chosen
 		return False
 				
 	def move(self, agents):
@@ -66,7 +73,7 @@ class RingedSeal(Animal):
 			self.x = self.restrict(self.x + uniform(-self.movement_speed, self.movement_speed), 0, 100)
 			self.y = self.restrict(self.y + uniform(-self.movement_speed, self.movement_speed), 0, 100)
 		else:
-# 			self.x = self.parents['f'].x
-# 			self.y = self.parents['f'].y
+			self.x = self.parents['f'].x
+			self.y = self.parents['f'].y
 			self.x = self.restrict(self.x + uniform(-self.movement_speed, self.movement_speed), 0, 100)
 			self.y = self.restrict(self.y + uniform(-self.movement_speed, self.movement_speed), 0, 100)

@@ -56,10 +56,21 @@ def update(ag):
 		for death in deaths:
 			agents.remove(death)
 		return True
-	child = ag.check_birth(agents, same_neighbours)
-	if child != False:
-		agents.append(child)
+	if not ag.isPregnant:
+		isPreg = ag.check_birth(agents, same_neighbours)
+		if isPreg != False:
+			ag.partner=isPreg
+			ag.daysBeforeBirth=0
+	else:
+		if ag.daysBeforeBirth<ag.pregnancy:
+			ag.daysBeforeBirth+=1
+		else:
+			child=ag.give_birth(ag.partner)
+			agents.append(child)
+			ag.partner=None
+			ag.daysBeforeBirth=None
 	ag.age += 1
+
 	return False
 			
 def update_one_unit_time():
