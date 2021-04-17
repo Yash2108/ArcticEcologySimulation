@@ -80,11 +80,9 @@ class PolarBear(Animal):
 				for i in range(len(neighbours_vector)):
 					neighbours_vector[i] = (neighbours_vector[i] * self.movement_speed * 
 																 (1 - neighbours_dist[i] / self.radius_sq)) / (neighbours_dist[i] ** 0.5)	 
-					print('Vector', neighbours_vector[i])
 				final_vector = np.sum(neighbours_vector, axis = 0) / len(neighbours_vector)
 				self.x += final_vector[0]
 				self.y += final_vector[1]
-				print('x and y', self.x, self.y) 
 			else:
 	 			self.x += uniform(-self.movement_speed, self.movement_speed)
 	 			self.y += uniform(-self.movement_speed, self.movement_speed)
