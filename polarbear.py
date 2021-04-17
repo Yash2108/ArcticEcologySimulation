@@ -64,28 +64,32 @@ class PolarBear(Animal):
 				
 	def move(self, agents):
 		if self.age > self.weaning:
-	 		name = 'PolarBear'
-	 		neighbours_vector = []
-	 		neighbours_dist = []
-	 		for nb in agents:
-	 			if type(nb).__name__ != name:
-	 				neighbours_vector.append([nb.x - self.x, nb.y - self.y])
-	 				neighbours_dist.append(neighbours_vector[-1][0] ** 2 + neighbours_vector[-1][1] ** 2)
-	 				if neighbours_dist[-1] >= self.radius_sq:
-	 					neighbours_vector.pop(-1)
-	 					neighbours_dist.pop(-1)
-	 		if len(neighbours_vector) > 0:
-	 			neighbours_vector = np.array(neighbours_vector)
-	 			neigbours_dist = np.array(neighbours_dist)
-	 			for i in range(len(neighbours_vector)):
-	 				neighbours_vector[i] = (neighbours_vector[i] * self.movement_speed * self.radius_sq) / (neighbours_dist[i] ** 0.5 * neighbours_dist[i])
-	# 				neighbours_vector[i] = (neighbours_vector[i] * self.movement_speed ** 0.5)
-	 			self.x, self.y = np.sum(neighbours_vector, axis = 0)
-	 		else:
+			name = 'PolarBear'
+			neighbours_vector = []
+			neighbours_dist = []
+			for nb in agents:
+				if type(nb).__name__ != name:
+					neighbours_vector.append([nb.x - self.x, nb.y - self.y])
+					neighbours_dist.append(neighbours_vector[-1][0] ** 2 + neighbours_vector[-1][1] ** 2)
+					if neighbours_dist[-1] >= self.radius_sq:
+						neighbours_vector.pop(-1)
+						neighbours_dist.pop(-1)
+			if len(neighbours_vector) > 0:
+				neighbours_vector = np.array(neighbours_vector)
+				neigbours_dist = np.array(neighbours_dist)
+				for i in range(len(neighbours_vector)):
+					neighbours_vector[i] = (neighbours_vector[i] * self.movement_speed * 
+																 (1 - neighbours_dist[i] / self.radius_sq)) / (neighbours_dist[i] ** 0.5)	 
+					print('Vector', neighbours_vector[i])
+				final_vector = np.sum(neighbours_vector, axis = 0) / len(neighbours_vector)
+				self.x += final_vector[0]
+				self.y += final_vector[1]
+				print('x and y', self.x, self.y) 
+			else:
 	 			self.x += uniform(-self.movement_speed, self.movement_speed)
 	 			self.y += uniform(-self.movement_speed, self.movement_speed)
-	 		self.x = self.restrict(self.x, 0, 100)
-	 		self.y = self.restrict(self.y, 0, 100)
+			self.x = self.restrict(self.x, 0, 100)
+			self.y = self.restrict(self.y, 0, 100)
 		else:
 			self.x = self.parents['f'].x
 			self.y = self.parents['f'].y
