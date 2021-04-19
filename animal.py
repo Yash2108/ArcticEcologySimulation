@@ -1,5 +1,5 @@
 from random import random, uniform
-from numpy.random import normal
+from numpy.random import normal, randint
 from abc import ABC, abstractmethod
 
 class Animal(ABC):
@@ -18,7 +18,7 @@ class Animal(ABC):
 		self.parents = parents
 		self.isPregnant=False
 		self.daysBeforeBirth=None
-		self.pregnancy=pregnancy
+		self.pregnancy=randint(pregnancy)
 		self.partner=None
 		self.children = []
 		
