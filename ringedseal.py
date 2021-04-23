@@ -61,7 +61,7 @@ class RingedSeal(Animal):
 				return self.give_birth(female, male)
 		return False
 				
-	def move(self, agents):
+	def move(self, agents, day):
 		if self.age > self.weaning:
 			self.x = self.restrict(self.x + uniform(-self.movement_speed, self.movement_speed), 0, 100)
 			self.y = self.restrict(self.y + uniform(-self.movement_speed, self.movement_speed), 0, 100)

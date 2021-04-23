@@ -62,7 +62,7 @@ class PolarBear(Animal):
 				return self.give_birth(female, male)
 		return False
 				
-	def move(self, agents):
+	def move(self, agents, day):
 		if self.age > self.weaning:
 			name = 'PolarBear'
 			neighbours_vector = []
@@ -83,7 +83,10 @@ class PolarBear(Animal):
 				final_vector = np.sum(neighbours_vector, axis = 0) / len(neighbours_vector)
 				self.x += final_vector[0]
 				self.y += final_vector[1]
-			else:
+			if day > self.seasons['summer']:
+				self.x -= uniform(0, self.movement_speed)
+				self.y -= uniform(0, self.movement_speed)				
+			elif len(neighbours_vector) == 0:
 	 			self.x += uniform(-self.movement_speed, self.movement_speed)
 	 			self.y += uniform(-self.movement_speed, self.movement_speed)
 			self.x = self.restrict(self.x, 0, 100)

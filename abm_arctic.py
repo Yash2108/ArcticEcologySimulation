@@ -27,9 +27,10 @@ def initialize():
 		agents.append(RingedSeal('f', parents))	
 		
 def observe():
-	global env, agents, img_count
+	global env, agents, img_count, day
 	cla()
 	img_count += 1
+	day = img_count % 365
 # 	mng = plt.get_current_fig_manager()
 # 	mng.window.state('zoomed')
 	imshow(env, origin = 'upper')
@@ -65,7 +66,7 @@ def update(ag):
 def update_one_unit_time():
 	global agents
 	for ag in agents:
-		ag.move(agents)
+		ag.move(agents, day)
 	i = 0
 	while i < len(agents):
 		if not update(agents[i]):
@@ -73,6 +74,7 @@ def update_one_unit_time():
 
 if __name__ == "__main__":
 	img_count = 0
+	day = 0
 	blue = cm.get_cmap('Blues', 4)
 	cm.register_cmap(name = 'ice', cmap = ListedColormap([blue(0), blue(1)]))
 	matplotlib.rcParams['image.cmap'] = 'ice'
