@@ -61,8 +61,8 @@ class PolarBear(Animal):
 				if len(opp_gender) == 0:
 					return False
 				chosen = choice(opp_gender)
-				ag.partner=chosen
-				ag.daysSpentInPregnancy=0
+				self.partner=chosen
+				self.daysSpentInPregnancy=0
 				return True
 		return False
 				
