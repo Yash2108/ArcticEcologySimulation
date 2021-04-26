@@ -60,7 +60,9 @@ class PolarBear(Animal):
 				if len(opp_gender) == 0:
 					return False
 				chosen = choice(opp_gender)
-				return chosen
+				ag.partner=chosen
+				ag.daysSpentInPregnancy=0
+				return True
 		return False
 				
 	def move(self, agents):

@@ -57,18 +57,15 @@ def update(ag):
 			agents.remove(death)
 		return True
 	if not ag.isPregnant:
-		isPreg = ag.check_birth(agents, same_neighbours)
-		if isPreg != False:
-			ag.partner=isPreg
-			ag.daysBeforeBirth=0
+		ag.check_birth(agents, same_neighbours)
 	else:
-		if ag.daysBeforeBirth<ag.pregnancy:
-			ag.daysBeforeBirth+=1
+		if ag.daysSpentInPregnancy<ag.pregnancy:
+			ag.daysSpentInPregnancy+=1
 		else:
 			child=ag.give_birth(ag.partner)
 			agents.append(child)
 			ag.partner=None
-			ag.daysBeforeBirth=None
+			ag.daysSpentInPregnancy=None
 	ag.age += 1
 
 	return False

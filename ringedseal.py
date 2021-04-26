@@ -59,13 +59,9 @@ class RingedSeal(Animal):
 				if len(opp_gender) == 0:
 					return False
 				chosen = choice(opp_gender)
-				if self.gender == 'f':
-					female = self
-					male = chosen
-				else:
-					female = chosen
-					male = self
-				return chosen
+				ag.partner=chosen
+				ag.daysSpentInPregnancy=0
+				return True
 		return False
 				
 	def move(self, agents):
