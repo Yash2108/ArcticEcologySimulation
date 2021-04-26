@@ -1,5 +1,5 @@
 from animal import Animal
-from random import random, uniform, choice
+from random import random, uniform, choice, shuffle
 from numpy.random import exponential
 
 class RingedSeal(Animal):
@@ -27,15 +27,63 @@ class RingedSeal(Animal):
 		
 	def check_death(self, agents, neighbours):
 		if len(neighbours) > 0 and random() < self.probability_death and self.age > self.weaning:
-			deaths = []
-			deaths.append(self)
-			RingedSeal.count -= 1
-			for child in self.children:
-				if child.age <= child.weaning:
-					deaths.append(child)
+			temp_neighbours = neighbours.copy()
+			shuffle(temp_neighbours)
+			temp_uid = 0
+			temp = 0
+			for i in temp_neighbours:
+				if i.hunger > 0.5:
+					temp += 1
+					i.hunger = 0.1
+					i.probability_death = i.probability_death * i.hunger
+					temp_uid = i.uid
+					deaths = []
+					deaths.append(self)
 					RingedSeal.count -= 1
-			return deaths
+					for child in self.children:
+						if child.age < child.weaning:
+							deaths.append(child)
+							RingedSeal.count -= 1
+					return deaths
+					break
+			
+			# for i in temp_neighbours:
+			# 	if i.uid != temp_uid:
+			# 		i.hunger += 0.1
 		return False
+	
+	def give_birth(self, chosen):
+		if self.gender == 'f':
+			female = self
+			male = chosen
+		else:
+			female = chosen
+			male = self
+# =======
+# 			temp_neighbours = neighbours.copy()
+# 			shuffle(temp_neighbours)
+# 			temp_uid = 0
+# 			temp = 0
+# 			for i in temp_neighbours:
+# 				if i.hunger > 0.5:
+# 					temp += 1
+# 					i.hunger = 0.1
+# 					i.probability_death = i.probability_death * i.hunger
+# 					temp_uid = i.uid
+# 					deaths = []
+# 					deaths.append(self)
+# 					RingedSeal.count -= 1
+# 					for child in self.children:
+# 						if child.age < child.weaning:
+# 							deaths.append(child)
+# 							RingedSeal.count -= 1
+# 					return deaths
+# 					break
+			
+# 			# for i in temp_neighbours:
+# 			# 	if i.uid != temp_uid:
+# 			# 		i.hunger += 0.1
+# 		return False
 	
 	def give_birth(self, chosen):
 		if self.gender == 'f':

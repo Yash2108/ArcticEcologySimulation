@@ -73,8 +73,11 @@ def update(ag):
 			agents.append(child)
 			ag.partner=None
 			ag.daysSpentInPregnancy=None
-	ag.age += 1
 
+	ag.age += 1
+	if type(ag).__name__ == "PolarBear":
+		ag.hunger += 0.1
+		ag.probability_death *= ag.hunger
 	return False
 			
 def update_one_unit_time():

@@ -9,18 +9,19 @@ class PolarBear(Animal):
 	initial_population = 8
 	capacity = 16
 	
-	def __init__(self, gender, parents, age = 2555):
+	def __init__(self, gender, parents, age = 2555, hunger=0.1):
 		super().__init__(gender = gender, 
 										 age = age, 
-										 probability_death = 0.1, 
+										 probability_death = 0.1 * hunger, 
 										 probability_birth = 0.1, 
 										 movement_speed = 10, 
-										 hunger = 0, 
+										 hunger = hunger, 
 										 radius = 30, 
 										 weaning = 912.5, 
 										 mating = {'m': 1825, 'f': 1460}, 
 										 parents = parents,
-										 pregnancy=[195, 265])
+										 pregnancy=[195, 265]
+										 )
 		self.x = uniform(0, 100)
 		self.y = uniform(20, 40)
 		self.uid = PolarBear.count
