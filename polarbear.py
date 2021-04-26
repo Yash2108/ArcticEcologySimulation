@@ -65,7 +65,7 @@ class PolarBear(Animal):
 				return True
 		return False
 				
-	def move(self, agents):
+	def move(self, agents, day):
 		if self.age > self.weaning:
 			name = 'PolarBear'
 			neighbours_vector = []
@@ -86,11 +86,14 @@ class PolarBear(Animal):
 				final_vector = np.sum(neighbours_vector, axis = 0) / len(neighbours_vector)
 				self.x += final_vector[0]
 				self.y += final_vector[1]
-			else:
+			if day > self.seasons['summer']:
+				self.x -= uniform(0, self.movement_speed)
+				self.y -= uniform(0, self.movement_speed)				
+			elif len(neighbours_vector) == 0:
 	 			self.x += uniform(-self.movement_speed, self.movement_speed)
 	 			self.y += uniform(-self.movement_speed, self.movement_speed)
 			self.x = self.restrict(self.x, 0, 100)
 			self.y = self.restrict(self.y, 0, 100)
 		else:
-			self.x = self.parents['f'].x
-			self.y = self.parents['f'].y
+			self.x = self.parents['f'].x + uniform(-2, 2)
+			self.y = self.parents['f'].y + uniform(-2, 2)

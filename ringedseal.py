@@ -31,7 +31,7 @@ class RingedSeal(Animal):
 			deaths.append(self)
 			RingedSeal.count -= 1
 			for child in self.children:
-				if child.age < child.weaning:
+				if child.age <= child.weaning:
 					deaths.append(child)
 					RingedSeal.count -= 1
 			return deaths
@@ -64,10 +64,10 @@ class RingedSeal(Animal):
 				return True
 		return False
 				
-	def move(self, agents):
+	def move(self, agents, day):
 		if self.age > self.weaning:
 			self.x = self.restrict(self.x + uniform(-self.movement_speed, self.movement_speed), 0, 100)
 			self.y = self.restrict(self.y + uniform(-self.movement_speed, self.movement_speed), 0, 100)
 		else:
- 			self.x = self.parents['f'].x
- 			self.y = self.parents['f'].y
+ 			self.x = self.parents['f'].x + uniform(-2, 2)
+ 			self.y = self.parents['f'].y + uniform(-2, 2)

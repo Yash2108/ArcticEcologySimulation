@@ -27,20 +27,27 @@ def initialize():
 		agents.append(RingedSeal('f', parents))	
 		
 def observe():
-	global env, agents, img_count
+	global env, agents, img_count, day
 	cla()
 	img_count += 1
+	day = img_count % 365
 # 	mng = plt.get_current_fig_manager()
 # 	mng.window.state('zoomed')
 	imshow(env, origin = 'upper')
-	x = {'PolarBear': [], 'RingedSeal': []}
-	y = {'PolarBear': [], 'RingedSeal': []}
+	x = {'PolarBear': [], 'RingedSeal': [], 'PolarBear_child': [], 'RingedSeal_child': []}
+	y = {'PolarBear': [], 'RingedSeal': [], 'PolarBear_child': [], 'RingedSeal_child': []}
 	for i in agents:
 		name = type(i).__name__
-		x[name].append(i.x)
-		y[name].append(i.y)
+		if i.age > i.weaning:
+			x[name].append(i.x)
+			y[name].append(i.y)
+		else:
+			x[name + '_child'].append(i.x)
+			y[name + '_child'].append(i.y)			
 	plot(x['PolarBear'], y['PolarBear'], 'ro', markersize = 8)
-	plot(x['RingedSeal'], y['RingedSeal'], 'yo')
+	plot(x['RingedSeal'], y['RingedSeal'], 'yo', markersize = 6)
+	plot(x['PolarBear_child'], y['PolarBear_child'], 'ro', markersize = 3)
+	plot(x['RingedSeal_child'], y['RingedSeal_child'], 'yo', markersize = 3)
 	axis([0, 100, 0, 100])
 	title("Step: {st}    Ringed Seals: {rs}    Polar Bears: {pb}".format(rs = RingedSeal.count, pb = PolarBear.count, st = img_count))
 
@@ -73,7 +80,7 @@ def update(ag):
 def update_one_unit_time():
 	global agents
 	for ag in agents:
-		ag.move(agents)
+		ag.move(agents, day)
 	i = 0
 	while i < len(agents):
 		if not update(agents[i]):
@@ -81,6 +88,7 @@ def update_one_unit_time():
 
 if __name__ == "__main__":
 	img_count = 0
+	day = 0
 	blue = cm.get_cmap('Blues', 4)
 	cm.register_cmap(name = 'ice', cmap = ListedColormap([blue(0), blue(1)]))
 	matplotlib.rcParams['image.cmap'] = 'ice'
