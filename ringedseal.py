@@ -19,7 +19,7 @@ class RingedSeal(Animal):
 										 weaning = 42, 
 										 mating = {'m': 1825, 'f': 1095}, 
 										 parents = parents,
-										 pregnancy=[270,270])
+										 pregnancy=[269,271])
 		self.x = uniform(0, 100)
 		self.y = self.restrict(100 - exponential(1.65) * 15, 0, 100)
 		self.uid = RingedSeal.count

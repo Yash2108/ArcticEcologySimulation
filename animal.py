@@ -18,7 +18,7 @@ class Animal(ABC):
 		self.parents = parents
 		self.isPregnant=False
 		self.daysBeforeBirth=None
-		self.pregnancy=randint(pregnancy)
+		self.pregnancy=randint(pregnancy[0], pregnancy[1])
 		self.partner=None
 		self.children = []
 		
