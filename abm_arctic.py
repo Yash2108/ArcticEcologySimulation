@@ -34,14 +34,20 @@ def observe():
 # 	mng = plt.get_current_fig_manager()
 # 	mng.window.state('zoomed')
 	imshow(env, origin = 'upper')
-	x = {'PolarBear': [], 'RingedSeal': []}
-	y = {'PolarBear': [], 'RingedSeal': []}
+	x = {'PolarBear': [], 'RingedSeal': [], 'PolarBear_child': [], 'RingedSeal_child': []}
+	y = {'PolarBear': [], 'RingedSeal': [], 'PolarBear_child': [], 'RingedSeal_child': []}
 	for i in agents:
 		name = type(i).__name__
-		x[name].append(i.x)
-		y[name].append(i.y)
+		if i.age > i.weaning:
+			x[name].append(i.x)
+			y[name].append(i.y)
+		else:
+			x[name + '_child'].append(i.x)
+			y[name + '_child'].append(i.y)			
 	plot(x['PolarBear'], y['PolarBear'], 'ro', markersize = 8)
-	plot(x['RingedSeal'], y['RingedSeal'], 'yo')
+	plot(x['RingedSeal'], y['RingedSeal'], 'yo', markersize = 6)
+	plot(x['PolarBear_child'], y['PolarBear_child'], 'ro', markersize = 3)
+	plot(x['RingedSeal_child'], y['RingedSeal_child'], 'yo', markersize = 3)
 	axis([0, 100, 0, 100])
 	title("Step: {st}    Ringed Seals: {rs}    Polar Bears: {pb}".format(rs = RingedSeal.count, pb = PolarBear.count, st = img_count))
 

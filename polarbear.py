@@ -92,5 +92,5 @@ class PolarBear(Animal):
 			self.x = self.restrict(self.x, 0, 100)
 			self.y = self.restrict(self.y, 0, 100)
 		else:
-			self.x = self.parents['f'].x
-			self.y = self.parents['f'].y
+			self.x = self.parents['f'].x + uniform(-2, 2)
+			self.y = self.parents['f'].y + uniform(-2, 2)
