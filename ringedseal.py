@@ -35,7 +35,7 @@ class RingedSeal(Animal):
 				if i.hunger > 0.5:
 					temp += 1
 					i.hunger = 0.1
-					i.probability_death = i.probability_death * i.hunger
+					i.probability_death = 0.1 * i.hunger
 					temp_uid = i.uid
 					deaths = []
 					deaths.append(self)
@@ -52,13 +52,13 @@ class RingedSeal(Animal):
 			# 		i.hunger += 0.1
 		return False
 	
-	def give_birth(self, chosen):
-		if self.gender == 'f':
-			female = self
-			male = chosen
-		else:
-			female = chosen
-			male = self
+# 	def give_birth(self, chosen):
+# 		if self.gender == 'f':
+# 			female = self
+# 			male = chosen
+# 		else:
+# 			female = chosen
+# 			male = self
 # =======
 # 			temp_neighbours = neighbours.copy()
 # 			shuffle(temp_neighbours)

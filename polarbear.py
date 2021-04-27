@@ -88,8 +88,8 @@ class PolarBear(Animal):
 				self.x += final_vector[0]
 				self.y += final_vector[1]
 			if day > self.seasons['summer']:
-				self.x -= uniform(0, self.movement_speed)
-				self.y -= uniform(0, self.movement_speed)				
+				self.x += uniform(-self.movement_speed // 2, self.movement_speed // 2)
+				self.y -= uniform(0, self.movement_speed // 2)				
 			elif len(neighbours_vector) == 0:
 	 			self.x += uniform(-self.movement_speed, self.movement_speed)
 	 			self.y += uniform(-self.movement_speed, self.movement_speed)

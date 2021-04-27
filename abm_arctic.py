@@ -77,7 +77,7 @@ def update(ag):
 	ag.age += 1
 	if type(ag).__name__ == "PolarBear":
 		ag.hunger += 0.1
-		ag.probability_death *= ag.hunger
+		ag.probability_death = 0.1 * ag.hunger
 	return False
 			
 def update_one_unit_time():
