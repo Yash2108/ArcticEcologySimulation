@@ -98,17 +98,32 @@ class RingedSeal(Animal):
 		}
 		child = RingedSeal(choice(['f', 'm']), parents, 0)
 		self.children.append(child)
+		self.isPregnant=False
 		return child
 		
 	def check_birth(self, agents, same_neighbours):
 		if self.age > self.mating:
 			if len(same_neighbours) > 0 and random() < self.probability_birth * (1 - RingedSeal.count / RingedSeal.capacity):
-				opp_gender = [ag for ag in same_neighbours if ag.gender != self.gender]
+				opp_gender = [ag for ag in same_neighbours if ag.gender != self.gender and not ag.isPregnant and ag.age>ag.weaning]
+				for i in opp_gender:
+					hasWeaningChildren=False
+					if len(i.children)!=0:
+						for j in i.children:
+							if j.age<j.weaning:
+								hasWeaningChildren=True
+								break
+					if hasWeaningChildren:
+						opp_gender.remove(i)
 				if len(opp_gender) == 0:
 					return False
 				chosen = choice(opp_gender)
+				if self.gender=='f':
+					self.isPregnant=True
+					self.daysSpentInPregnancy=0
+				else:
+					chosen.isPregnant=True
+					chosen.daysSpentInPregnancy=0
 				self.partner=chosen
-				self.daysSpentInPregnancy=0
 				return True
 		return False
 				

@@ -52,20 +52,35 @@ class PolarBear(Animal):
 		}
 		child = PolarBear(choice(['f', 'm']), parents, 0)
 		self.children.append(child)
+		self.isPregnant=False
 		return child
-	
+			
 	def check_birth(self, agents, same_neighbours):
 		if self.age > self.mating:
 			if len(same_neighbours) > 0 and random() < self.probability_birth * (1 - PolarBear.count / PolarBear.capacity):
-				opp_gender = [ag for ag in same_neighbours if ag.gender != self.gender]
+				opp_gender = [ag for ag in same_neighbours if ag.gender != self.gender and not ag.isPregnant and ag.age>ag.weaning]
+				for i in opp_gender:
+					hasWeaningChildren=False
+					if len(i.children)!=0:
+						for j in i.children:
+							if j.age<j.weaning:
+								hasWeaningChildren=True
+								break
+					if hasWeaningChildren:
+						opp_gender.remove(i)
 				if len(opp_gender) == 0:
 					return False
 				chosen = choice(opp_gender)
+				if self.gender=='f':
+					self.isPregnant=True
+					self.daysSpentInPregnancy=0
+				else:
+					chosen.isPregnant=True
+					chosen.daysSpentInPregnancy=0
 				self.partner=chosen
-				self.daysSpentInPregnancy=0
 				return True
 		return False
-				
+
 	def move(self, agents, day):
 		if self.age > self.weaning:
 			name = 'PolarBear'
@@ -89,10 +104,11 @@ class PolarBear(Animal):
 				self.y += final_vector[1]
 			if day > self.seasons['summer']:
 				self.x += uniform(-self.movement_speed // 2, self.movement_speed // 2)
-				self.y -= uniform(0, self.movement_speed // 2)				
-			elif len(neighbours_vector) == 0:
-	 			self.x += uniform(-self.movement_speed, self.movement_speed)
-	 			self.y += uniform(-self.movement_speed, self.movement_speed)
+				self.y -= uniform(0, self.movement_speed // 2)
+			elif self.gender == 'f' and not self.isPregnant or self.gender == 'm':
+				if len(neighbours_vector) == 0:
+					self.x += uniform(-self.movement_speed, self.movement_speed)
+					self.y += uniform(-self.movement_speed, self.movement_speed)
 			self.x = self.restrict(self.x, 0, 100)
 			self.y = self.restrict(self.y, 0, 100)
 		else:

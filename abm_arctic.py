@@ -10,7 +10,6 @@ import matplotlib
 import copy as cp
 
 matplotlib.use('TkAgg')
-
 def initialize():
 	global env, agents
 	env = np.vstack((np.zeros((75, 101)), np.ones((26, 101))))
@@ -75,7 +74,7 @@ def update(ag):
 			ag.daysSpentInPregnancy=None
 
 	ag.age += 1
-	if type(ag).__name__ == "PolarBear":
+	if type(ag).__name__ == "PolarBear" and not ag.isPregnant:
 		ag.hunger += 0.1
 		ag.probability_death = 0.1 * ag.hunger
 	return False
@@ -83,7 +82,8 @@ def update(ag):
 def update_one_unit_time():
 	global agents
 	for ag in agents:
-		ag.move(agents, day)
+		if not ag.isPregnant:
+			ag.move(agents, day)
 	i = 0
 	while i < len(agents):
 		if not update(agents[i]):
