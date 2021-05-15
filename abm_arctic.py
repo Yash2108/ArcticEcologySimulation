@@ -8,6 +8,7 @@ from pylab import *
 import numpy as np
 import matplotlib
 import copy as cp
+import math
 
 matplotlib.use('TkAgg')
 
@@ -33,16 +34,16 @@ def initialize():
 
 
 def observe():
-    global env, agents, img_count, day, season
-    if (10 <= day <= 300):
-        blue = cm.get_cmap('Blues', 100)
-        cm.register_cmap(name='ice', cmap=ListedColormap(
-            [blue(i) for i in range(1)]+[blue(35)]))
-        matplotlib.rcParams['image.cmap'] = 'ice'
-
+    global env, agents, img_count, day
     cla()
     img_count += 1
     day = img_count % 365
+    month = (day // 30)
+    parts = (month+1) if month < 6 else (month % 6)
+    blue = cm.get_cmap('Blues', 100)
+    cm.register_cmap(name='ice', cmap=ListedColormap(
+        [blue(i) for i in range(5)]+[blue(35)]*(parts)))
+    matplotlib.rcParams['image.cmap'] = 'ice'
 # 	mng = plt.get_current_fig_manager()
 # 	mng.window.state('zoomed')
     imshow(env, origin='upper')
@@ -68,7 +69,7 @@ def observe():
     plot(x['PolarBearPregnant'], y['PolarBearPregnant'], 'r^', markersize=8)
     plot(x['RingedSealPregnant'], y['RingedSealPregnant'], 'y^', markersize=6)
     axis([0, 100, 0, 100])
-    title("Step: {st}    Ringed Seals: {rs}    Polar Bears: {pb}".format(
+    title("Step: {st}  Ringed Seals: {rs}  Polar Bears: {pb}".format(
         rs=RingedSeal.count, pb=PolarBear.count, st=img_count))
 
 
@@ -79,9 +80,7 @@ def update(ag):
                   (ag.x - nb.x) ** 2 + (ag.y - nb.y) ** 2 < ag.radius_sq]
     same_neighbours = [nb for nb in agents if type(nb).__name__ == name and
                        (ag.x - nb.x) ** 2 + (ag.y - nb.y) ** 2 < ag.radius_sq]
-    deaths = False
-    if not ag.isInDen:
-        deaths = ag.check_death(agents, neighbours)
+    deaths = ag.check_death(agents, neighbours)
     if deaths != False:
         for death in deaths:
             agents.remove(death)
@@ -105,7 +104,7 @@ def update(ag):
         else:
             ag.hunger += 0.1
             ag.probability_death = 0.1 * ag.hunger
-        print(img_count, ag.hunger)
+        # print(img_count, ag.hunger)
 
         if type(ag).__name__ == "PolarBear" and ag.age >= 9125:
             ag.probability_death = 0.8
@@ -115,11 +114,7 @@ def update(ag):
 def update_one_unit_time():
     global agents
     for ag in agents:
-        if not ag.isPregnant or (day > ag.seasons['summer']):
-            ag.move(agents, day)
-        elif ag.isPregnant:
-            if not ag.isInDen:
-                ag.find_den()
+        ag.move(agents, day)
 
     i = 0
     while i < len(agents):
