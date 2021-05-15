@@ -37,11 +37,14 @@ def observe():
 # 	mng = plt.get_current_fig_manager()
 # 	mng.window.state('zoomed')
 	imshow(env, origin = 'upper')
-	x = {'PolarBear': [], 'RingedSeal': [], 'PolarBear_child': [], 'RingedSeal_child': []}
-	y = {'PolarBear': [], 'RingedSeal': [], 'PolarBear_child': [], 'RingedSeal_child': []}
+	x = {'PolarBear': [], 'RingedSeal': [], 'PolarBear_child': [], 'RingedSeal_child': [], 'PolarBearPregnant':[], 'RingedSealPregnant':[]}
+	y = {'PolarBear': [], 'RingedSeal': [], 'PolarBear_child': [], 'RingedSeal_child': [], 'PolarBearPregnant':[], 'RingedSealPregnant':[]}
 	for i in agents:
 		name = type(i).__name__
-		if i.age > i.weaning:
+		if i.isPregnant:
+			x[name+'Pregnant'].append(i.x)
+			y[name+'Pregnant'].append(i.y)
+		elif i.age > i.weaning:
 			x[name].append(i.x)
 			y[name].append(i.y)
 		else:
@@ -51,6 +54,8 @@ def observe():
 	plot(x['RingedSeal'], y['RingedSeal'], 'yo', markersize = 6)
 	plot(x['PolarBear_child'], y['PolarBear_child'], 'ro', markersize = 3)
 	plot(x['RingedSeal_child'], y['RingedSeal_child'], 'yo', markersize = 3)
+	plot(x['PolarBearPregnant'], y['PolarBearPregnant'], 'r^', markersize = 8)
+	plot(x['RingedSealPregnant'], y['RingedSealPregnant'], 'y^', markersize = 6)
 	axis([0, 100, 0, 100])
 	title("Step: {st}    Ringed Seals: {rs}    Polar Bears: {pb}".format(rs = RingedSeal.count, pb = PolarBear.count, st = img_count))
 
@@ -61,8 +66,9 @@ def update(ag):
 							  (ag.x - nb.x) ** 2 + (ag.y - nb.y) ** 2 < ag.radius_sq]
 	same_neighbours = [nb for nb in agents if type(nb).__name__ == name and 
 										 (ag.x - nb.x) ** 2 + (ag.y - nb.y) ** 2 < ag.radius_sq]
-										 
-	deaths = ag.check_death(agents, neighbours)
+	deaths=False
+	if not ag.isInDen:									 
+		deaths = ag.check_death(agents, neighbours)
 	if deaths != False:
 		for death in deaths:
 			agents.remove(death)

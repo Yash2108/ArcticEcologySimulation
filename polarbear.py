@@ -76,6 +76,7 @@ class PolarBear(Animal):
 				if self.gender=='f':
 					self.isPregnant=True
 					self.daysSpentInPregnancy=0
+					# self.probability_death-=0.9*self.probability_death
 				else:
 					chosen.isPregnant=True
 					chosen.daysSpentInPregnancy=0
