@@ -101,7 +101,7 @@ class RingedSeal(Animal):
 		self.isPregnant=False
 		return child
 		
-	def check_birth(self, agents, same_neighbours):
+	def check_birth(self, agents, same_neighbours, day):
 		if self.age > self.mating:
 			if len(same_neighbours) > 0 and random() < self.probability_birth * (1 - RingedSeal.count / RingedSeal.capacity):
 				opp_gender = [ag for ag in same_neighbours if ag.gender != self.gender and not ag.isPregnant and ag.age>ag.weaning]

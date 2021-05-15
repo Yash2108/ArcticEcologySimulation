@@ -3,8 +3,8 @@ from numpy.random import normal, randint
 from abc import ABC, abstractmethod
 
 class Animal(ABC):
-	
-	seasons = {'winter': 0, 'spring': 90, 'summer': 180, 'autumn': 270}
+
+	seasons = {'winter': 0, 'spring': 122, 'summer': 183, 'autumn': 304}
 	
 	def __init__(self, gender, age, probability_death, probability_birth, 
 							 movement_speed, hunger, radius, weaning, mating, parents, pregnancy):

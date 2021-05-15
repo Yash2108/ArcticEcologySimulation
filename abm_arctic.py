@@ -57,13 +57,14 @@ def update(ag):
 							  (ag.x - nb.x) ** 2 + (ag.y - nb.y) ** 2 < ag.radius_sq]
 	same_neighbours = [nb for nb in agents if type(nb).__name__ == name and 
 										 (ag.x - nb.x) ** 2 + (ag.y - nb.y) ** 2 < ag.radius_sq]
+										 
 	deaths = ag.check_death(agents, neighbours)
 	if deaths != False:
 		for death in deaths:
 			agents.remove(death)
 		return True
 	if not ag.isPregnant:
-		ag.check_birth(agents, same_neighbours)
+		ag.check_birth(agents, same_neighbours, day)
 	else:
 		if ag.daysSpentInPregnancy<ag.pregnancy:
 			ag.daysSpentInPregnancy+=1
@@ -82,8 +83,9 @@ def update(ag):
 def update_one_unit_time():
 	global agents
 	for ag in agents:
-		if not ag.isPregnant:
+		if not ag.isPregnant or ( day > ag.seasons['summer']):
 			ag.move(agents, day)
+		
 	i = 0
 	while i < len(agents):
 		if not update(agents[i]):

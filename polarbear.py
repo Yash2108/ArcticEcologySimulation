@@ -55,7 +55,9 @@ class PolarBear(Animal):
 		self.isPregnant=False
 		return child
 			
-	def check_birth(self, agents, same_neighbours):
+	def check_birth(self, agents, same_neighbours, day):
+		if day<self.seasons['spring'] or day>self.seasons['summer']:
+			return False
 		if self.age > self.mating:
 			if len(same_neighbours) > 0 and random() < self.probability_birth * (1 - PolarBear.count / PolarBear.capacity):
 				opp_gender = [ag for ag in same_neighbours if ag.gender != self.gender and not ag.isPregnant and ag.age>ag.weaning]
