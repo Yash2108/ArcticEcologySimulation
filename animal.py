@@ -24,6 +24,7 @@ class Animal(ABC):
 		self.pregnancy=randint(pregnancy[0], pregnancy[1])
 		self.partner=None
 		self.children = []
+		self.isInDen=None
 		
 	@abstractmethod
 	def check_death(self):
@@ -44,3 +45,7 @@ class Animal(ABC):
 		elif n == 0:
 			n += uniform(0, self.movement_speed)
 		return n
+	
+	@abstractmethod
+	def find_den(self):
+		pass

@@ -116,3 +116,12 @@ class PolarBear(Animal):
 		else:
 			self.x = self.parents['f'].x + uniform(-2, 2)
 			self.y = self.parents['f'].y + uniform(-2, 2)
+	
+	def find_den(self):
+		move_val=self.movement_speed//2 + random()
+		self.y=self.restrict(self.y-uniform(0, move_val),0,100)
+		self.x=self.restrict(self.x + uniform(-self.movement_speed // 2, self.movement_speed // 2),0,100)
+		if self.y<25:
+			self.isInDen=True
+
+		

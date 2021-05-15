@@ -134,3 +134,13 @@ class RingedSeal(Animal):
 		else:
  			self.x = self.parents['f'].x + uniform(-2, 2)
  			self.y = self.parents['f'].y + uniform(-2, 2)
+	
+	def find_den(self):
+		move_val=self.movement_speed//2 + random()
+		direction=1
+		if self.x>75:
+			direction=-1
+		self.y=self.restrict(self.y-uniform(0, move_val*direction),0,100)
+		self.x=self.restrict(self.x + uniform(-self.movement_speed // 2, self.movement_speed // 2),0,100)
+		if self.y<75 and self.y>50:
+			self.isInDen=True

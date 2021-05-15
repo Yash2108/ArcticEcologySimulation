@@ -12,7 +12,11 @@ import copy as cp
 matplotlib.use('TkAgg')
 def initialize():
 	global env, agents
-	env = np.vstack((np.zeros((75, 101)), np.ones((26, 101))))
+	# env = np.vstack((np.zeros((75, 101)), np.ones((26, 101))))
+	env=[[None for j in range(100)]for i in range(100)]
+	for i in range(100):
+		for j in range(100):
+			env[i][j]=i
 	agents = []
 	parents = {
 		'm': "Initialized",
@@ -85,6 +89,9 @@ def update_one_unit_time():
 	for ag in agents:
 		if not ag.isPregnant or ( day > ag.seasons['summer']):
 			ag.move(agents, day)
+		elif ag.isPregnant:
+			if not ag.isInDen:
+				ag.find_den()
 		
 	i = 0
 	while i < len(agents):
@@ -94,7 +101,7 @@ def update_one_unit_time():
 if __name__ == "__main__":
 	img_count = 0
 	day = 0
-	blue = cm.get_cmap('Blues', 4)
-	cm.register_cmap(name = 'ice', cmap = ListedColormap([blue(0), blue(1)]))
+	blue = cm.get_cmap('Blues', 100)
+	cm.register_cmap(name = 'ice', cmap = ListedColormap([blue(i) for i in range(3)]+[blue(35)]))
 	matplotlib.rcParams['image.cmap'] = 'ice'
 	pycxsimulator.GUI().start(func = [initialize, observe, update_one_unit_time])
