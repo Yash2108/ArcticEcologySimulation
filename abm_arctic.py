@@ -33,7 +33,13 @@ def initialize():
 
 
 def observe():
-    global env, agents, img_count, day
+    global env, agents, img_count, day, season
+    if (10 <= day <= 300):
+        blue = cm.get_cmap('Blues', 100)
+        cm.register_cmap(name='ice', cmap=ListedColormap(
+            [blue(i) for i in range(1)]+[blue(35)]))
+        matplotlib.rcParams['image.cmap'] = 'ice'
+
     cla()
     img_count += 1
     day = img_count % 365
