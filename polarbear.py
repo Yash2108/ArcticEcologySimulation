@@ -115,8 +115,12 @@ class PolarBear(Animal):
 											(1 - neighbours_dist[i] / self.radius_sq)) / (neighbours_dist[i] ** 0.5)
 				final_vector = np.sum(
 					neighbours_vector, axis=0) / len(neighbours_vector)
-				self.x += final_vector[0]
-				self.y += final_vector[1]
+				if day > self.seasons['summer']:
+					self.x += final_vector[0] * min(self.hunger, 1)
+					self.y += final_vector[1] * min(self.hunger, 1)
+				else:
+					self.x += final_vector[0]
+					self.y += final_vector[1]
 			if day > self.seasons['summer']:
 				self.x += uniform(-self.movement_speed // 2,
 								  self.movement_speed // 2)
