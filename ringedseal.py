@@ -34,9 +34,9 @@ class RingedSeal(Animal):
             temp_uid = 0
             temp = 0
             for i in temp_neighbours:
-                if i.hunger > 0.5:
-                    i.hunger = 0.05
-                    i.probability_death += 0.1 * i.hunger
+                if i.hunger > 0.7:
+                    i.hunger = 0.1
+                    i.probability_death = (i.hunger) + (i.age)/1000
                     deaths = []
                     deaths.append(self)
                     RingedSeal.count -= 1
@@ -45,10 +45,6 @@ class RingedSeal(Animal):
                             deaths.append(child)
                             RingedSeal.count -= 1
                     return deaths
-
-            # for i in temp_neighbours:
-            # 	if i.uid != temp_uid:
-            # 		i.hunger += 0.1
         return False
 
 # 	def give_birth(self, chosen):
@@ -138,4 +134,3 @@ class RingedSeal(Animal):
         else:
             self.x = self.parents['f'].x + uniform(-2, 2)
             self.y = self.parents['f'].y + uniform(-2, 2)
-

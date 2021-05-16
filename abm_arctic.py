@@ -2,7 +2,8 @@ from matplotlib.colors import ListedColormap
 from random import randint, uniform
 from ringedseal import RingedSeal
 from polarbear import PolarBear
-from matplotlib import cm
+from matplotlib import cm, gridspec
+import matplotlib.pyplot as plt
 import pycxsimulator
 from pylab import *
 import numpy as np
@@ -11,6 +12,8 @@ import copy as cp
 import math
 
 matplotlib.use('TkAgg')
+cumulative_population = {'PolarBear': [], 'RingedSeal': [], "Walrus": []}
+days = 0
 
 
 def initialize():
@@ -33,9 +36,14 @@ def initialize():
         agents.append(RingedSeal('f', parents))
 
 
+spec = gridspec.GridSpec(ncols=2, nrows=1, width_ratios=[3, 1])
+
+
 def observe():
-    global env, agents, img_count, day
-    cla()
+    global env, agents, img_count, day, cumulative_population, spec
+    clf()
+    fig = gcf()
+
     img_count += 1
     day = img_count % 365
     if(day > 183 and day < 304):
@@ -46,16 +54,18 @@ def observe():
     cm.register_cmap(name='ice', cmap=ListedColormap(
         [blue(i) for i in range(3)]+[blue(35)]*(parts)))
     matplotlib.rcParams['image.cmap'] = 'ice'
-# 	mng = plt.get_current_fig_manager()
-# 	mng.window.state('zoomed')
+
     imshow(env, origin='upper')
     x = {'PolarBear': [], 'RingedSeal': [], 'PolarBear_child': [],
          'RingedSeal_child': [], 'PolarBearPregnant': [], 'RingedSealPregnant': []}
     y = {'PolarBear': [], 'RingedSeal': [], 'PolarBear_child': [],
          'RingedSeal_child': [], 'PolarBearPregnant': [], 'RingedSealPregnant': []}
-    ratio = RingedSeal.count/PolarBear.count
+
+    population = {'PolarBear': 0, 'RingedSeal': 0}
+
     for i in agents:
         name = type(i).__name__
+        population[name] += 1
         if i.isPregnant:
             x[name+'Pregnant'].append(i.x)
             y[name+'Pregnant'].append(i.y)
@@ -65,6 +75,8 @@ def observe():
         else:
             x[name + '_child'].append(i.x)
             y[name + '_child'].append(i.y)
+
+    ratio = RingedSeal.count/PolarBear.count
     plot(x['PolarBear'], y['PolarBear'], 'ro', markersize=8)
     plot(x['RingedSeal'], y['RingedSeal'], 'yo', markersize=6)
     plot(x['PolarBear_child'], y['PolarBear_child'], 'ro', markersize=3)
@@ -103,11 +115,11 @@ def update(ag):
     ag.age += 1
     if type(ag).__name__ == "PolarBear" and not ag.isPregnant:
         if 180 <= day <= 300:
-            ag.hunger += 0.005
-            ag.probability_death += 0.1 * ag.hunger
+            ag.hunger += 0.001
+            ag.probability_death += ((ag.hunger))
         else:
-            ag.hunger += 0.05
-            ag.probability_death = 0.1 * ag.hunger
+            ag.hunger += 0.1
+            ag.probability_death += ((ag.hunger) + (ag.age)/1000)
         # print(img_count, ag.hunger)
 
         if type(ag).__name__ == "PolarBear" and ag.age >= 9125:
@@ -116,7 +128,7 @@ def update(ag):
 
 
 def update_one_unit_time():
-    global agents
+    global agents, days
     for ag in agents:
         ag.move(agents, day)
 
@@ -124,6 +136,7 @@ def update_one_unit_time():
     while i < len(agents):
         if not update(agents[i]):
             i += 1
+    days += 1
 
 
 if __name__ == "__main__":
