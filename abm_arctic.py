@@ -39,7 +39,7 @@ def observe():
     img_count += 1
     day = img_count % 365
     month = (day // 30)
-    parts = (month+1) if month < 6 else (month % 6)
+    parts = (month+1) if month < 6 else (month)
     blue = cm.get_cmap('Blues', 100)
     cm.register_cmap(name='ice', cmap=ListedColormap(
         [blue(i) for i in range(5)]+[blue(35)]*(parts)))
