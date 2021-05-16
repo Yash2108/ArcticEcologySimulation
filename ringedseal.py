@@ -28,16 +28,15 @@ class RingedSeal(Animal):
 
     def check_death(self, agents, neighbours):
         if len(neighbours) > 0 and random() < self.probability_death and self.age > self.weaning:
-            temp_neighbours = neighbours.copy()
+            temp_neighbours = [
+                i for i in neighbours if i.age > i.weaning]
             shuffle(temp_neighbours)
             temp_uid = 0
             temp = 0
             for i in temp_neighbours:
-                if i.hunger > 0.5:
-                    temp += 1
+                if i.hunger > 0.7:
                     i.hunger = 0.1
-                    i.probability_death = 0.1 * i.hunger
-                    temp_uid = i.uid
+                    i.probability_death += 0.1 * i.hunger
                     deaths = []
                     deaths.append(self)
                     RingedSeal.count -= 1

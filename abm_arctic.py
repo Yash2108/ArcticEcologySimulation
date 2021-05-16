@@ -103,7 +103,7 @@ def update(ag):
     if type(ag).__name__ == "PolarBear" and not ag.isPregnant:
         if 180 <= day <= 300:
             ag.hunger += 0.01
-            ag.probability_death = 0.1 * ag.hunger
+            ag.probability_death += 0.1 * ag.hunger
         else:
             ag.hunger += 0.1
             ag.probability_death = 0.1 * ag.hunger
