@@ -101,7 +101,7 @@ class RingedSeal(Animal):
         return [child]
 
     def check_birth(self, agents, same_neighbours, day):
-        if day < self.seasons['summer'] or day > self.seasons['autumn']:
+        if day < 130 or day > self.seasons['autumn']:
             return False
         if self.age > self.mating:
             if len(same_neighbours) > 0 and random() < self.probability_birth * (1 - RingedSeal.count / RingedSeal.capacity):

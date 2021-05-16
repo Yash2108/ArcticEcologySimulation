@@ -72,8 +72,8 @@ def observe():
     plot(x['PolarBearPregnant'], y['PolarBearPregnant'], 'r^', markersize=8)
     plot(x['RingedSealPregnant'], y['RingedSealPregnant'], 'y^', markersize=6)
     axis([0, 100, 0, 100])
-    title("Step: {st}  Ringed Seals: {rs}  Polar Bears: {pb}  Population Ratio: {pr}".format(
-        rs=RingedSeal.count, pb=PolarBear.count, st=img_count, pr=ratio))
+    title("Step: {st}  Day: {dy}  Ringed Seals: {rs}  Polar Bears: {pb}  Population Ratio: {pr}".format(
+        rs=RingedSeal.count, pb=PolarBear.count, st=img_count, pr=ratio, dy = day))
 
 
 def update(ag):
