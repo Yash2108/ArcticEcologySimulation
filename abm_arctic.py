@@ -38,11 +38,13 @@ def observe():
     cla()
     img_count += 1
     day = img_count % 365
-    month = (day // 30)
-    parts = (month+1) if month < 6 else (month)
+    if(day > 180 and day < 300):
+        parts = 3
+    else:
+        parts = 1
     blue = cm.get_cmap('Blues', 100)
     cm.register_cmap(name='ice', cmap=ListedColormap(
-        [blue(i) for i in range(5)]+[blue(35)]*(parts)))
+        [blue(i) for i in range(3)]+[blue(35)]*(parts)))
     matplotlib.rcParams['image.cmap'] = 'ice'
 # 	mng = plt.get_current_fig_manager()
 # 	mng.window.state('zoomed')
@@ -51,6 +53,7 @@ def observe():
          'RingedSeal_child': [], 'PolarBearPregnant': [], 'RingedSealPregnant': []}
     y = {'PolarBear': [], 'RingedSeal': [], 'PolarBear_child': [],
          'RingedSeal_child': [], 'PolarBearPregnant': [], 'RingedSealPregnant': []}
+    ratio = RingedSeal.count/PolarBear.count
     for i in agents:
         name = type(i).__name__
         if i.isPregnant:
@@ -69,8 +72,8 @@ def observe():
     plot(x['PolarBearPregnant'], y['PolarBearPregnant'], 'r^', markersize=8)
     plot(x['RingedSealPregnant'], y['RingedSealPregnant'], 'y^', markersize=6)
     axis([0, 100, 0, 100])
-    title("Step: {st}  Ringed Seals: {rs}  Polar Bears: {pb}".format(
-        rs=RingedSeal.count, pb=PolarBear.count, st=img_count))
+    title("Step: {st}  Ringed Seals: {rs}  Polar Bears: {pb}  Population Ratio: {pr}".format(
+        rs=RingedSeal.count, pb=PolarBear.count, st=img_count, pr=ratio))
 
 
 def update(ag):
@@ -100,7 +103,7 @@ def update(ag):
     if type(ag).__name__ == "PolarBear" and not ag.isPregnant:
         if 180 <= day <= 300:
             ag.hunger += 0.01
-            ag.probability_death += 0.1 * ag.hunger
+            ag.probability_death = 0.1 * ag.hunger
         else:
             ag.hunger += 0.1
             ag.probability_death = 0.1 * ag.hunger
