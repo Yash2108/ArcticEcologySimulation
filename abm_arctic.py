@@ -53,9 +53,9 @@ def observe():
     cm.register_cmap(name='ice', cmap=ListedColormap(
         [blue(i) for i in range(3)]+[blue(35)]*(parts)))
     matplotlib.rcParams['image.cmap'] = 'ice'
-# 	mng = plt.get_current_fig_manager()
-# 	mng.window.state('zoomed')
-    imshow(env, origin='upper')
+    # 	mng = plt.get_current_fig_manager()
+    # 	mng.window.state('zoomed')
+    # imshow(env, origin='upper')
     x = {'PolarBear': [], 'RingedSeal': [], 'PolarBear_child': [],
          'RingedSeal_child': [], 'PolarBearPregnant': [], 'RingedSealPregnant': []}
     y = {'PolarBear': [], 'RingedSeal': [], 'PolarBear_child': [],
@@ -75,13 +75,13 @@ def observe():
             x[name + '_child'].append(i.x)
             y[name + '_child'].append(i.y)
     ax1 = fig.add_subplot(spec[0], label="1")
-    ax0 = fig.add_subplot(spec[0], label="2", frame_on = False)
+    ax0 = fig.add_subplot(spec[0], label="1", frame_on = False)
     ax2 = fig.add_subplot(spec[1], label="3")
     ax3 = fig.add_subplot(spec[1], label="4", frame_on = False)
-    ax4 = fig.add_subplot(spec[1], label="4", frame_on = False)
-    ax1.imshow(env)
-    ax1.set_axis_off()
-    # ax0.set_axis_off()
+    # ax4 = fig.add_subplot(spec[1], label="4", frame_on = False)
+    ax1.imshow(env, origin='lower')
+    # ax1.set_axis_off()
+    ax0.set_axis_off()
     ax1.set_aspect(0.84)
     ax0.plot(x['PolarBear'], y['PolarBear'], 'ro', markersize=8)
     ax0.plot(x['RingedSeal'], y['RingedSeal'], 'yo', markersize=6)
@@ -92,7 +92,7 @@ def observe():
     ax0.axis([0, 100, 0, 100])
     ax0.set_title("Step: {st}  Day: {dy}  Ringed Seals: {rs}  Polar Bears: {pb}  Population Ratio: {pr}".format(
         rs=RingedSeal.count, pb=PolarBear.count, st=img_count, pr=ratio, dy = day))
-    ax0.set_aspect(0.935)
+    ax0.set_aspect(0.84)
     l2,=ax2.plot(day_axis, cumulative_population['RingedSeal'], color="C1", label="Ringed Seals")
     ax2.tick_params(axis='x', colors="C1")
     ax2.tick_params(axis='y', colors="C1", pad=5)
@@ -110,9 +110,9 @@ def observe():
     ax2.legend([l2,l3], ['Ringed Seals',"Polar Bear"], loc="lower right")
     plt.subplots_adjust(right=0.95)
 		
-    # print(ax0.get_position())
-    pos = ax0.get_position()
-    ax1.set_position([pos.x0 - 0.2, pos.y0, 1, 1])
+    # # print(ax0.get_position())
+    # pos = ax0.get_position()
+    # ax1.set_position([pos.x0 - 0.2, pos.y0, 1, 1])
 
     
 
