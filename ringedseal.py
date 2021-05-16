@@ -139,5 +139,3 @@ class RingedSeal(Animal):
 			self.x = self.parents['f'].x + uniform(-2, 2)
 			self.y = self.parents['f'].y + uniform(-2, 2)
 
-	def find_den(self):
-		pass

@@ -47,5 +47,5 @@ class Animal(ABC):
 		return n
 	
 	@abstractmethod
-	def find_den(self):
+	def give_birth(self):
 		pass
